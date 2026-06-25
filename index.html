@@ -18,7 +18,7 @@
         <div class="space-x-6 text-sm uppercase tracking-widest">
             <a href="#" class="hover:text-cyan-400">Le Projet</a>
             <a href="#" class="hover:text-cyan-400">Mission</a>
-            <a href="#" class="bg-cyan-500 text-slate-900 px-4 py-2 rounded-full font-bold">Connexion</a>
+            <button onclick="netlifyIdentity.open('login')">Connexion</button>
         </div>
         <div data-netlify-identity-menu></div>
     </nav>
@@ -34,4 +34,9 @@
     </main>
 </body>
 </html>
+<script>
+  window.netlifyIdentitySettings = {
+    locale: 'fr'
+  };
+</script>
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
