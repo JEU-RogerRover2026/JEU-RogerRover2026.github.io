@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Revues - J.E.U.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+        // Fonction pour mettre à jour l'affichage de l'identifiant
+        function updateCadetName(user) {
+            const userNameDisplay = document.getElementById('cadetName');
+            if (userNameDisplay && user) {
+                // Affiche le nom complet s'il existe via l'invitation, sinon n'affiche rien
+                userNameDisplay.innerText = user.user_metadata?.full_name || "";
+            }
+        }
+
+        window.onload = function() {
+            // À l'initialisation du widget
+            netlifyIdentity.on('init', user => {
+                if (!user) {
+                    // Accès refusé : éjection immédiate sans garder la page dans l'historique
+                    window.location.replace("index.html");
+                } else {
+                    updateCadetName(user);
+                }
+            });
+
+            // Si reconnexion sur la même page
+            netlifyIdentity.on('login', user => {
+                updateCadetName(user);
+            });
+
+            // Écouteur d'événement de déconnexion native de Netlify
+            netlifyIdentity.on('logout', () => {
+                window.location.replace("index.html");
+            });
+        };
+
+        // Fonction de déconnexion forcée reliée au bouton
+        function triggerLogout() {
+            const user = netlifyIdentity.currentUser();
+            if (user) {
+                netlifyIdentity.logout();
+            } else {
+                window.location.replace("index.html");
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background: #070a13; color: #e2e8f0; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); border: 1px solid #1e293b; }
+        .locked-card { background: rgba(15, 23, 42, 0.3); border: 1px dashed #334155; opacity: 0.6; filter: grayscale(80%); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<nav class="bg-slate-900/80 backdrop-blur border-b border-slate-800 p-4 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="font-orbitron font-black text-xl tracking-widest text-white">
+            J.E.U. <span class="text-cyan-400">HUB</span>
+        </div>
+        <div class="flex gap-4 items-center">
+            <a href="index.html" class="text-sm font-bold text-slate-400 hover:text-cyan-400 transition hidden md:block">Retour à l'accueil</a>
+            
+            <button onclick="triggerLogout()" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-900/50 hover:border-red-500 px-4 py-2 rounded-lg text-sm font-bold transition font-orbitron">
+                DÉCONNEXION
+            </button>
+            
+        </div>
+    </div>
+</nav>
+
+<header class="py-12 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-orbitron font-black text-white mb-4">
+            TABLEAU DE BORD <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">ORBITAL</span>
+        </h1>
+        <p class="text-lg text-slate-400">
+            Bienvenue dans votre centre de contrôle, Cadet <span id="cadetName" class="text-cyan-300 font-bold uppercase"></span>.
+            Sélectionnez une revue spatiale pour débuter votre entraînement théorique.
+        </p>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto py-8 px-6 flex-grow w-full">
+    
+    <div class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-end">
+        <h2 class="text-2xl font-orbitron text-cyan-400">CYCLE DES 12 REVUES</h2>
+        <div class="text-sm text-slate-500 font-mono">Progression : <span class="text-white">1/12</span></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+		<div class="glass-card rounded-xl p-6 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.15)] flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-cyan-500 text-black font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 01</span>
+				<span class="text-green-400 text-sm font-bold">🟢 ACCESSIBLE</span>
+			</div>
+			<h3 class="text-xl font-bold text-white mb-3 leading-tight">La Chute Libre Permanente</h3>
+			<p class="text-slate-400 text-sm mb-6 flex-grow">
+				Pourquoi un satellite ne tombe-t-il jamais sur Terre ? Découvrez le principe fascinant de l'orbite grâce à une explication intuitive mêlant gravité, vitesse et chute libre.
+			</p>
+			<a href="revue1.html" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-orbitron font-bold py-3 rounded-lg transition">
+				CONSULTER
+			</a>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 02</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">L'Anatomie d'un Satellite</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Pourquoi certains satellites restent-ils immobiles au-dessus de la Terre tandis que d'autres la survolent plusieurs fois par jour ? Découvrez les grandes familles d'orbites (LEO, MEO, GEO...) et les missions auxquelles elles sont destinées.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 03</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">La Conquête des Orbites</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Comment place-t-on un satellite en orbite ? Des bases de lancement au calcul de l'orbite de l'ISS, découvrez les étapes qui transforment une fusée en satellite opérationnel.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 04</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">La Lune en Ligne de Mire</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Découvrez comment les segments spatial, sol et utilisateur coopèrent pour faire fonctionner un système satellitaire, avant de maîtriser la géométrie des orbites avec les notions de périgée, d'apogée et les premières lois de Kepler.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 05</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">Le Réseau Terrestre</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Entrez dans les coulisses des opérations spatiales : centres de contrôle, antennes paraboliques, téléports et réseaux de communication qui permettent de piloter les satellites en permanence.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 06</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">GEOINT & Télédétection</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Découvrez comment les satellites transforment la lumière réfléchie par la Terre en images exploitables et en données stratégiques pour la cartographie, l'environnement, l'agriculture ou le renseignement.
+			</p>
+		</div>
+
+    </div>
+</main>
+
+<footer class="mt-16 border-t border-slate-800 pt-12 pb-8 px-4 text-center">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mb-8">
+        <a href="https://www.esa.int" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">ESA</a>
+        <a href="https://cnes.fr" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">CNES</a>
+        <a href="https://www.nasa.gov" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">NASA</a>
+        <a href="https://global.jaxa.jp" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">JAXA</a>
+    </div>
+    
+    <div class="max-w-2xl mx-auto bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-slate-500 text-xs leading-relaxed text-justify">
+        <p class="mb-4"><strong>Note sur la fiction ludique :</strong> Les éléments, personnages et situations présentés dans cette revue sont issus d'une fiction ludique destinée à illustrer les concepts scientifiques. Bien que cette simulation s'appuie sur des données réelles de l'aérospatiale, elle ne constitue en aucun cas un document officiel ou une procédure de pilotage réelle. L'association J.E.U. décline toute responsabilité en cas de confusion avec des informations techniques réelles. L'usage de cette fiction est strictement réservé à des fins pédagogiques et récréatives.</p>
+        <p class="text-center">© 2026 Association J.E.U. - Tous droits réservés.</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidature | J.E.U. 2026</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+body { font-family:'Space Grotesk',sans-serif; background:#070a13; color:#e2e8f0; }
+.font-orbitron { font-family:'Orbitron',sans-serif; }
+
+.glass-card{
+ background:rgba(15,23,42,0.6);
+ backdrop-filter:blur(10px);
+ border:1px solid #1e293b;
+}
+
+.day-dot{
+ width:10px;height:10px;border-radius:999px;
+ display:inline-block;margin-right:6px;
+}
+
+.popover{
+ position:absolute;
+ z-index:50;
+ width:260px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav class="bg-slate-900/80 border-b border-slate-800 p-4 flex justify-between">
+<div class="font-orbitron text-white font-bold">J.E.U. <span class="text-cyan-400">CANDIDATURE</span></div>
+<a href="index.html" class="text-slate-300 hover:text-cyan-400">Accueil</a>
+</nav>
+
+<!-- HEADER -->
+<header class="relative py-16 px-6 text-center border-b border-slate-800">
+
+<div class="max-w-5xl mx-auto">
+
+<span class="text-cyan-400 font-bold tracking-widest uppercase text-sm">
+Programme d’Admission • Association J.E.U. 2026
+</span>
+
+<h1 class="text-5xl md:text-7xl font-orbitron font-black text-white mt-4 mb-6 leading-tight">
+
+DOSSIER DE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+CANDIDATURE
+</span>
+
+</h1>
+
+<p class="text-xl text-slate-400 italic">
+"Explorer, c'est savoir échouer souvent, mais surtout, ne jamais cesser d'essayer."
+</p>
+
+</div>
+
+</header>
+
+<main class="max-w-6xl mx-auto p-6 grid md:grid-cols-3 gap-6">
+
+<!-- LEFT -->
+<section class="md:col-span-2 space-y-6">
+
+<!-- PROCESS -->
+<div class="glass-card p-6 rounded-xl">
+<h2 class="text-cyan-400 font-orbitron mb-3">Processus de sélection</h2>
+<p class="text-sm text-slate-300">
+1305 candidatures → 412 pré-sélectionnés → 30 retenus
+</p>
+</div>
+
+<!-- CRITERES -->
+<div class="glass-card p-6 rounded-xl">
+<h2 class="text-cyan-400 font-orbitron mb-3">Critères de sélection</h2>
+<p class="text-slate-300 text-sm">
+Nous recherchons des profils curieux, créatifs et motivés. Aucun niveau expert requis.
+Le programme est conçu pour apprendre.
+</p>
+</div>
+
+<!-- EMAIL -->
+<div class="glass-card p-6 rounded-xl">
+<h2 class="text-cyan-400 font-orbitron mb-3">Transmission du dossier</h2>
+
+<p class="text-sm text-slate-300 mb-3">
+Cette étape est <strong>strictement réservée aux candidats ayant reçu le dossier par courrier postal.</strong>
+</p>
+
+<p class="text-sm text-slate-400 mb-3">
+Les éléments à renvoyer sont :
+</p>
+
+<ul class="text-sm text-slate-300 list-disc pl-5 space-y-1">
+<li>Notice d’information à l’attention des parents ou tuteurs légaux</li>
+<li>Annexes 1, 2 et 3</li>
+<li>Votre éventuelle création personnelle</li>
+</ul>
+
+<a href="mailto:roger.rover2026@outlook.fr?subject=Candidature%20RogerRover2026"
+   class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 underline">
+✉ Ouvrir le client mail
+</a>
+
+<p class="text-xs text-slate-500 mt-2">
+Merci de respecter strictement les documents demandés.
+</p>
+</div>
+
+<!-- FAQ -->
+<div class="glass-card p-6 rounded-xl">
+<h2 class="text-cyan-400 font-orbitron mb-3">FAQ</h2>
+
+<div class="space-y-3 text-sm">
+
+<div>
+<strong>Comment savoir si mon dossier est reçu ?</strong>
+<p class="text-slate-400">Email automatique de confirmation.</p>
+</div>
+
+<div>
+<strong>Recommandation professeur ?</strong>
+<p class="text-slate-400">Optionnelle mais fortement valorisée.</p>
+</div>
+
+<div>
+<strong>Retour si refus ?</strong>
+<p class="text-slate-400">Message standard envoyé à tous les candidats.</p>
+</div>
+
+</div>
+</div>
+
+</section>
+
+<!-- RIGHT: CALENDAR + TIMELINE -->
+<aside class="glass-card p-4 rounded-xl">
+
+<h2 class="font-orbitron text-cyan-400 mb-4">Calendrier des étapes</h2>
+
+<div id="timeline" class="space-y-4 text-sm"></div>
+
+</aside>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="text-center text-xs text-slate-500 py-10 border-t border-slate-800 mt-10">
+<p>RGPD : données traitées conformément à la réglementation européenne.</p>
+</footer>
+
+<script>
+
+const events = [
+{
+date:"12 juillet 2026",
+title:"Fin des candidatures",
+desc:"Date limite d'envoi du dossier",
+color:"bg-red-400"
+},
+{
+date:"13–15 juillet 2026",
+title:"Évaluation",
+desc:"Analyse par le comité scientifique",
+color:"bg-yellow-400"
+},
+{
+date:"20 juillet 2026",
+title:"Résultats",
+desc:"Annonce officielle",
+color:"bg-cyan-400"
+},
+{
+date:"21 juillet 2026",
+title:"Lancement",
+desc:"Début du programme",
+color:"bg-green-400"
+},
+{
+date:"31 août 2027",
+title:"Fin programme",
+desc:"Clôture officielle",
+color:"bg-purple-400"
+}
+];
+
+const timeline=document.getElementById("timeline");
+
+events.forEach((e,i)=>{
+let div=document.createElement("div");
+div.className="relative pl-6 cursor-pointer";
+
+div.innerHTML=`
+<span class="day-dot ${e.color}"></span>
+<span class="font-bold text-white">${e.date}</span>
+<p class="text-slate-400 text-xs">${e.title}</p>
+`;
+
+div.onclick=(ev)=>showPopover(ev,e);
+timeline.appendChild(div);
+});
+
+function showPopover(ev,e){
+let old=document.querySelector(".popover");
+if(old) old.remove();
+
+let pop=document.createElement("div");
+pop.className="popover glass-card p-3 rounded-lg";
+
+pop.style.top=ev.clientY+"px";
+pop.style.left=ev.clientX+"px";
+
+pop.innerHTML=`
+<strong class="text-cyan-400">${e.title}</strong>
+<p class="text-xs text-slate-300">${e.desc}</p>
+<button onclick="downloadICS('${e.title}','${e.date}','${e.desc}')"
+class="mt-2 bg-cyan-500 text-black px-2 py-1 rounded text-xs">
+Ajouter calendrier
+</button>
+`;
+
+document.body.appendChild(pop);
+}
+
+function downloadICS(title,date,desc){
+
+let start=date.replaceAll(" ","").replaceAll("–","-");
+
+let ics=`BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${title}
+DESCRIPTION:${desc}
+DTSTART;VALUE=DATE:${start}
+END:VEVENT
+END:VCALENDAR`;
+
+let blob=new Blob([ics],{type:"text/calendar"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="event.ics";
+a.click();
+}
+
+document.addEventListener("click",(e)=>{
+if(!e.target.closest(".popover")) {
+let p=document.querySelector(".popover");
+if(p) p.remove();
+}
+});
+
+</script>
+
+</body>
+</html>
