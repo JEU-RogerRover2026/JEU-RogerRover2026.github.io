@@ -9,23 +9,15 @@
     
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-        // Fonction pour mettre à jour l'affichage de l'identifiant
-        function updateCadetName(user) {
-            const userNameDisplay = document.getElementById('cadetName');
-            if (userNameDisplay && user) {
-                // Affiche le nom complet s'il existe via l'invitation, sinon n'affiche rien
-                userNameDisplay.innerText = user.user_metadata?.full_name || "";
-            }
-        }
-
-        window.onload = function() {
+        // SÉCURITÉ : S'exécute immédiatement (hors du window.onload)
         if (window.netlifyIdentity) {
+            
+            // 1. Éjection si l'utilisateur n'est pas connecté
             netlifyIdentity.on('init', user => {
                 if (!user) {
-                    // Accès refusé : éjection immédiate
                     window.location.replace("index.html");
                 } else {
-                    // Si la page contient l'élément cadetName, on le met à jour
+                    // Mise à jour du nom du cadet
                     const userNameDisplay = document.getElementById('cadetName');
                     if (userNameDisplay) {
                         userNameDisplay.innerText = user.user_metadata?.full_name || "Anonyme";
@@ -33,19 +25,18 @@
                 }
             });
 
-            // Déconnexion
+            // 2. Éjection dès que la déconnexion est validée
             netlifyIdentity.on('logout', () => {
                 window.location.replace("index.html");
             });
         }
-    };
 
-    // Fonction attachée au bouton DÉCONNEXION
-    function triggerLogout() {
-        if (window.netlifyIdentity) {
-            netlifyIdentity.logout();
+        // 3. Fonction déclenchée par ton bouton HTML "DÉCONNEXION"
+        function triggerLogout() {
+            if (window.netlifyIdentity) {
+                netlifyIdentity.logout();
+            }
         }
-    }
     </script>
 
     <style>

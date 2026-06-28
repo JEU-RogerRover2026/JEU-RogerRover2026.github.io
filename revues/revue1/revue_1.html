@@ -34,35 +34,31 @@
     </script>
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-    window.onload = function() {
-            if (window.netlifyIdentity) {
-                // Sécurité : Éjection si le cadet n'est pas connecté
-                netlifyIdentity.on('init', user => {
-                    if (!user) {
-                        window.location.replace("index.html");
-                    }
-                });
-                // Redirection après l'action de déconnexion
-                netlifyIdentity.on('logout', () => {
+        // --- PARTIE 1 : SÉCURITÉ NETLIFY (Immédiate) ---
+        if (window.netlifyIdentity) {
+            netlifyIdentity.on('init', user => {
+                if (!user) {
                     window.location.replace("index.html");
-                });
-            }
-            
-            // --- TES AUTRES FONCTIONS WINDOW.ONLOAD DEJA PRESENTES ---
-            // Garde bien tes fonctions existantes ici (resetSim(), drawChessDemo(), etc.)
-            if (typeof resetSim === "function") resetSim();
-            if (typeof drawChessDemo === "function") drawChessDemo();
-            if (typeof renderChessBoard === "function") renderChessBoard();
-            if (typeof updateProgress === "function") updateProgress();
-        };
+                }
+            });
+            netlifyIdentity.on('logout', () => {
+                window.location.replace("index.html");
+            });
+        }
 
-        // Fonction déclenchée par le bouton de déconnexion
         function triggerLogout() {
             if (window.netlifyIdentity) {
                 netlifyIdentity.logout();
             }
         }
-    }
+
+        // --- PARTIE 2 : TES ANIMATIONS DE LA REVUE (Au chargement de la page) ---
+        window.onload = function() {
+            if (typeof resetSim === "function") resetSim();
+            if (typeof drawChessDemo === "function") drawChessDemo();
+            if (typeof renderChessBoard === "function") renderChessBoard();
+            if (typeof updateProgress === "function") updateProgress();
+        };
     </script>
     <style>
         body {
