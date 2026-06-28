@@ -19,36 +19,33 @@
         }
 
         window.onload = function() {
-            // À l'initialisation du widget
+        if (window.netlifyIdentity) {
             netlifyIdentity.on('init', user => {
                 if (!user) {
-                    // Accès refusé : éjection immédiate sans garder la page dans l'historique
+                    // Accès refusé : éjection immédiate
                     window.location.replace("index.html");
                 } else {
-                    updateCadetName(user);
+                    // Si la page contient l'élément cadetName, on le met à jour
+                    const userNameDisplay = document.getElementById('cadetName');
+                    if (userNameDisplay) {
+                        userNameDisplay.innerText = user.user_metadata?.full_name || "Anonyme";
+                    }
                 }
             });
 
-            // Si reconnexion sur la même page
-            netlifyIdentity.on('login', user => {
-                updateCadetName(user);
-            });
-
-            // Écouteur d'événement de déconnexion native de Netlify
+            // Déconnexion
             netlifyIdentity.on('logout', () => {
                 window.location.replace("index.html");
             });
-        };
-
-        // Fonction de déconnexion forcée reliée au bouton
-        function triggerLogout() {
-            const user = netlifyIdentity.currentUser();
-            if (user) {
-                netlifyIdentity.logout();
-            } else {
-                window.location.replace("index.html");
-            }
         }
+    };
+
+    // Fonction attachée au bouton DÉCONNEXION
+    function triggerLogout() {
+        if (window.netlifyIdentity) {
+            netlifyIdentity.logout();
+        }
+    }
     </script>
 
     <style>
@@ -106,7 +103,7 @@
 			<p class="text-slate-400 text-sm mb-6 flex-grow">
 				Pourquoi un satellite ne tombe-t-il jamais sur Terre ? Découvrez le principe fascinant de l'orbite grâce à une explication intuitive mêlant gravité, vitesse et chute libre.
 			</p>
-			<a href="revue1.html" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-orbitron font-bold py-3 rounded-lg transition">
+			<a href="revues/revue1/revue_1.html" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-orbitron font-bold py-3 rounded-lg transition">
 				CONSULTER
 			</a>
 		</div>

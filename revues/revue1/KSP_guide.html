@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="fr"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide Première Fusée KSP</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+        body { font-family: 'Libre Franklin', sans-serif; }
+        .step-number {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 1.4rem; flex-shrink: 0;
+        }
+        @media print {
+			h2 {
+				break-before: page; /* standard moderne */
+				page-break-before: always; /* fallback anciens navigateurs */
+			  }
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+        }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+	
+    </style>
+  
+   <!-- FontAwesome for Icons -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+ </head>
+ 
+
+ 
+ <body data-template-id="__page-root" class="min-h-screen" style="background: rgb(10, 14, 26);"><!-- Top bar -->
+	<nav data-template-id="nav-bar" class="canva-header py-3 px-6 flex items-center justify-between sticky top-0 z-50" style="background: rgb(13, 17, 23); margin-right:15px">
+		<h2 data-template-id="nav-title" class="canva-text font-black tracking-tight uppercase" style="color: rgb(52, 211, 153); font-weight: 900; font-style: normal; font-size: 18px;">KERBAL SPACE PROGRAM</h2>
+		<button onclick="window.print()" class="no-print flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition text-sm font-semibold"> 
+			<i data-lucide="printer" style="width:1px;height:1px"></i> 
+			Imprimer 
+		</button>
+  </nav>
+  
+  <!-- Hero -->
+  <section class="relative w-full" style="height: calc(70 * min(var(--vh, 1vh), 1vh))"><img data-template-id="hero-image" class="canva-image absolute inset-0 w-full h-full object-cover" loading="lazy" src="assets/KSP/ksp.jpg" alt="A stunning view of a rocket leaving a fiery trail as it ascends into the night sky.">
+   <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex items-end">
+    <div class="max-w-5xl mx-auto w-full px-6 pb-12">
+     <h1 data-template-id="main-title" class="canva-text drop-shadow-2xl" style="color: rgb(255, 255, 255); font-weight: 900; font-style: normal; font-size: 38px;"> Ton Premier Pas vers les Étoiles</h1>
+     <h1 data-template-id="main-title" class="canva-text drop-shadow-2xl" style="color: rgb(255, 255, 255); font-weight: 900; font-style: normal; font-size: 38px;"> Guide de Construction sur KSP</h1>
+     <p data-template-id="hero-subtitle" class="canva-text mt-4 max-w-2xl" style="color: rgb(148, 163, 184); font-weight: 400; font-style: normal; font-size: 18px;">Apprends à construire, lancer et piloter ta toute première fusée dans Kerbal Space Program.</p>
+    </div>
+   </div>
+  </section>
+  <main class="max-w-5xl mx-auto px-6 py-16"><!-- Intro -->
+   <p data-template-id="intro-text" class="canva-text text-lg mb-14 leading-relaxed" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Salut futur ingénieur spatial ! Bienvenue dans le VAB (le Bâtiment d'Assemblage des Véhicules). C'est ici que tu vas assembler ta toute première fusée pour aller explorer l'espace. Suis ce guide pour bien commencer.</p><!-- Section 1: VAB -->
+   <section class="mb-14">
+    <h2 data-template-id="s1-heading" class="canva-text mb-4" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">1. Découvrir ton atelier (Le VAB)</h2>
+
+    <p data-template-id="s1-intro" class="canva-text mb-4" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Lorsque tu entres dans le VAB, tout peut sembler impressionnant. Voici les zones clés à connaître :</p>
+    <ul class="space-y-3 ml-1">
+     <li><p data-template-id="s1-bullet-1" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Le centre de la pièce : C'est là que se trouve le socle de lancement. Tout ce que tu attaches ici sera ta fusée.</p></li>
+     <li><p data-template-id="s1-bullet-2" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• La barre latérale gauche (Les pièces) : C'est ton catalogue ! Tu y trouveras tous les moteurs, réservoirs et capsules classés par catégories.</p></li>
+     <li><p data-template-id="s1-bullet-3" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• La barre supérieure droite (Les outils) : Ici, tu peux renommer ta fusée, voir les informations de vol, et surtout, lancer ta fusée sur le pas de tir.</p></li>
+    </ul>
+	   
+	<div class="rounded-xl overflow-hidden mb-6"><img data-template-id="s2-image" class="canva-image w-full object-cover" loading="lazy" src="assets/KSP/ksp_vab.png" alt="A SpaceX Falcon rocket displayed in a spacious hangar under bright industrial lights.">
+    </div>
+   </section><!-- Section 2: 3 Pillars -->
+   <section class="mb-14">
+    <h2 data-template-id="s2-heading" class="canva-text mb-4" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">2. Les 3 piliers d'une fusée réussie</h2>
+    <p data-template-id="s2-intro" class="canva-text mb-6" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Pour qu'une fusée décolle et atteigne l'espace, elle a besoin de trois éléments de base, empilés de haut en bas :</p>
+    <div class="overflow-x-auto rounded-xl" data-template-id="s2-table-wrap" style="background: rgb(17, 24, 39);">
+     <table>
+      <thead>
+       <tr>
+        <th data-template-id="s2-th-element" class="canva-text" style="color: rgb(52, 211, 153); font-weight: 700; font-style: normal; font-size: 16px;">Élément</th>
+        <th data-template-id="s2-th-role" class="canva-text" style="color: rgb(52, 211, 153); font-weight: 700; font-style: normal; font-size: 16px;">Rôle</th>
+        <th data-template-id="s2-th-where" class="canva-text" style="color: rgb(52, 211, 153); font-weight: 700; font-style: normal; font-size: 16px;">Où le trouver ?</th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr>
+        <td data-template-id="s2-r1-c1" class="canva-text font-semibold" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">Capsule (Pod)</td>
+        <td data-template-id="s2-r1-c2" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">C'est le cerveau et la maison du Kerbonaute.</td>
+        <td data-template-id="s2-r1-c3" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Onglet "Pods"</td>
+       </tr>
+       <tr>
+        <td data-template-id="s2-r2-c1" class="canva-text font-semibold" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">Réservoirs</td>
+        <td data-template-id="s2-r2-c2" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Ils contiennent le carburant nécessaire au voyage.</td>
+        <td data-template-id="s2-r2-c3" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Onglet "Fuel Tanks"</td>
+       </tr>
+       <tr>
+        <td data-template-id="s2-r3-c1" class="canva-text font-semibold" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">Moteur</td>
+        <td data-template-id="s2-r3-c2" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Il brûle le carburant pour propulser la fusée.</td>
+        <td data-template-id="s2-r3-c3" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Onglet "Engines"</td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+   </section><!-- Section 3: Step by step -->
+   <section class="mb-14">
+    <h2 data-template-id="s3-heading" class="canva-text mb-8" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">3. Étape par étape : Construire ta première fusée</h2>
+    <div class="space-y-5">
+     <article class="flex gap-4 items-start p-5 rounded-xl" data-template-id="s3-step-0-card" style="background: rgb(17, 24, 39);">
+      <div class="step-number bg-emerald-500 text-white">
+       0
+      </div>
+      <div>
+       <h3 data-template-id="s3-step-0-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Accède au VAB</h3>
+       <p data-template-id="s3-step-0-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Depuis le Centre Spatial, clique sur le bâtiment "Vehicle Assembly Building" (VAB). C'est un grand hangar bleu et blanc.</p>
+      </div>
+     </article>
+     <article class="flex gap-4 items-start p-5 rounded-xl" data-template-id="s3-step-1-card" style="background: rgb(17, 24, 39);">
+      <div class="step-number bg-emerald-500 text-white">
+       1
+      </div>
+      <div>
+       <h3 data-template-id="s3-step-1-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Pose la capsule</h3>
+       <p data-template-id="s3-step-1-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Choisis la capsule "Mk1 Command Pod" dans l'onglet des pièces et clique au centre du socle pour la poser.</p>
+      </div>
+     </article>
+     <article class="flex gap-4 items-start p-5 rounded-xl" data-template-id="s3-step-2-card" style="background: rgb(17, 24, 39);">
+      <div class="step-number bg-emerald-500 text-white">
+       2
+      </div>
+      <div>
+       <h3 data-template-id="s3-step-2-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Ajoute le réservoir</h3>
+       <p data-template-id="s3-step-2-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Va dans l'onglet "Fuel Tanks" et prends un réservoir (comme le "FL-T400"). Clique juste en dessous de ta capsule pour l'attacher.</p>
+      </div>
+     </article>
+     <article class="flex gap-4 items-start p-5 rounded-xl" data-template-id="s3-step-3-card" style="background: rgb(17, 24, 39);">
+      <div class="step-number bg-emerald-500 text-white">
+       3
+      </div>
+      <div>
+       <h3 data-template-id="s3-step-3-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Installe le moteur</h3>
+       <p data-template-id="s3-step-3-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Va dans l'onglet "Engines". Choisis le "LV-T30 'Reliant'" et colle-le sous ton réservoir. C'est lui qui pousse ta fusée vers les étoiles.</p>
+      </div>
+     </article>
+     <article class="flex gap-4 items-start p-5 rounded-xl" data-template-id="s3-step-4-card" style="background: rgb(17, 24, 39);">
+      <div class="step-number bg-emerald-500 text-white">
+       4
+      </div>
+      <div>
+       <h3 data-template-id="s3-step-4-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Ajoute des ailerons</h3>
+       <p data-template-id="s3-step-4-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Pour que ta fusée reste droite en vol, ajoute des ailerons dans l'onglet "Aerodynamics" sur les côtés du réservoir.</p>
+      </div>
+     </article>
+     <article class="flex gap-4 items-start p-5 rounded-xl" data-template-id="s3-step-5-card" style="background: rgb(17, 24, 39);">
+      <div class="step-number bg-emerald-500 text-white">
+       5
+      </div>
+      <div>
+       <h3 data-template-id="s3-step-5-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Parachute !</h3>
+       <p data-template-id="s3-step-5-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">N'oublie surtout pas l'onglet "Utility" pour ajouter un parachute au sommet de ta capsule ! Sans lui, le retour sera très brutal.</p>
+      </div>
+     </article>
+    </div>
+    <aside data-template-id="s3-tip-box" class="canva-panel mt-6 p-5 rounded-xl border-l-4 border-emerald-400" style="background: rgb(13, 31, 23);">
+     <h3 data-template-id="s3-tip-title" class="canva-text font-bold mb-2" style="color: rgb(52, 211, 153); font-weight: 700; font-style: normal; font-size: 19px;">💡 Conseil d'expert</h3>
+     <p data-template-id="s3-tip-text" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Si ta fusée est trop lourde, elle ne décollera pas. Vérifie toujours le "Thrust-to-Weight Ratio" (TWR). Si le chiffre est inférieur à 1, ta fusée est trop lourde !</p>
+    </aside>
+   </section><!-- Section 4: Staging -->
+   <section class="mb-14">
+    <h2 data-template-id="s4-heading" class="canva-text mb-4" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">4. Maîtriser le Staging (Les étapes de lancement)</h2>
+
+    <p data-template-id="s4-intro" class="canva-text mb-4" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Le Staging détermine l'ordre dans lequel les éléments de ta fusée s'activent lorsque tu appuies sur la barre "Espace" pendant le vol.</p>
+    <div data-template-id="s4-stages-box" class="canva-panel p-5 rounded-xl mb-4" style="background: rgb(17, 24, 39);">
+		<p data-template-id="s4-stage-0" class="canva-text mb-2" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Étape 0 (tout en haut) : Ton parachute. Il s'activera en dernier, lors de ton retour.</p>
+		<p data-template-id="s4-stage-1" class="canva-text mb-2" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Étape 1 (en dessous) : Le découpleur ou toute autre action de séparation.</p>
+		<p data-template-id="s4-stage-2" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Étape 2 (la plus basse) : Ton moteur. Il s'allume dès que tu lances ta fusée !</p>
+    </div>
+	<div class="canva-text mb-4">
+	<a href="https://youtu.be/lZb_NQ7JPdA?t=15" target="_blank" class="flex items-center space-x-4 bg-slate-900 p-4 rounded-xl border border-slate-800 hover:border-spaceNeonPurple transition">
+		<i class="fa-brands fa-youtube text-2xl text-red-500"></i>
+		<div>
+			<p class="text-sm font-bold text-white">KSP tuto staging</p>
+			<p class="text-[10px] text-slate-500">KSP - Vidéo pour comprendre où modifier le staging.</p>
+		</div>
+	</a>
+	</div>
+    <aside data-template-id="s4-warning-box" class="canva-panel p-5 rounded-xl border-l-4 border-red-500" style="background: rgb(26, 18, 21);">
+     <h3 data-template-id="s4-warning-title" class="canva-text font-bold mb-2" style="color: rgb(248, 113, 113); font-weight: 700; font-style: normal; font-size: 19px;">⚠️ Le conseil du chef de mission</h3>
+     <p data-template-id="s4-warning-1" class="canva-text mb-2" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">• Si ton moteur n'est pas dans la bonne étape, il ne s'allumera pas quand tu appuieras sur "Espace".</p>
+     <p data-template-id="s4-warning-2" class="canva-text mb-2" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">• Si ton parachute est trop bas, il risque de s'ouvrir pendant le décollage... catastrophe !</p>
+     <p data-template-id="s4-warning-fix" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Tu peux glisser-déposer les icônes des pièces dans les bonnes cases pour réorganiser ton lancement.</p>
+    </aside>
+   </section><!-- Section 4.5: Launch -->
+   <section class="mb-14">
+    <h2 data-template-id="s45-heading" class="canva-text mb-4" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">4.5. Lancement et Contrôle de Stabilité</h2>
+    <p data-template-id="s45-intro" class="canva-text mb-4" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Maintenant que ta fusée est construite et que tu as configuré le Staging, il est temps de la lancer !</p>
+    <div data-template-id="s45-info-box" class="canva-panel p-5 rounded-xl mb-4" style="background: rgb(17, 24, 39);">
+     <p data-template-id="s45-launch-step" class="canva-text mb-2" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Clique sur "Launch" en haut à droite du VAB pour envoyer ta fusée au pas de tir.</p>
+     <p data-template-id="s45-sas-info" class="canva-text mb-2" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Appuie sur "Espace" pour démarrer le moteur ! Appuie sur "T" pour activer le SAS (Stability Augmentation System).</p>
+     <p data-template-id="s45-controls" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Touches de vol : Z/S pour pencher avant/arrière, Q/D pour gauche/droite. Avec le SAS (T), ta fusée se stabilise seule !</p>
+    </div>
+    <aside data-template-id="s45-tip-box" class="canva-panel p-5 rounded-xl border-l-4 border-cyan-400" style="background: rgb(13, 21, 32);">
+     <h3 data-template-id="s45-tip-title" class="canva-text font-bold mb-2" style="color: rgb(34, 211, 238); font-weight: 700; font-style: normal; font-size: 19px;">💡 Conseil : Utilise le SAS dès le départ</h3>
+     <p data-template-id="s45-tip-text" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Le SAS rend ton premier vol beaucoup plus facile. Imagine un copilote automatique qui empêche ta fusée de tourner en cercles !</p>
+    </aside>
+   </section><!-- Section 5: Missions -->
+   <section class="mb-14">
+    <h2 data-template-id="s5-heading" class="canva-text mb-4" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">5. Tes premières missions d'entraînement</h2>
+    <p data-template-id="s5-intro" class="canva-text mb-6" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Ne cherche pas à aller sur la Lune tout de suite ! Apprivoise ta machine avec ces défis progressifs :</p>
+    <div class="space-y-4">
+     <div data-template-id="s5-mission-1" class="canva-card p-5 rounded-xl" style="background: rgb(17, 24, 39);">
+      <h3 data-template-id="s5-mission-1-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Mission "Saut de puce"</h3>
+      <p data-template-id="s5-mission-1-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Décolle, monte jusqu'à 2 000 mètres, puis coupe tes moteurs. Laisse la fusée retomber et ouvre ton parachute (touche Espace).</p>
+     </div>
+     <div data-template-id="s5-mission-2" class="canva-card p-5 rounded-xl" style="background: rgb(17, 24, 39);">
+      <h3 data-template-id="s5-mission-2-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Mission "Perce les nuages"</h3>
+      <p data-template-id="s5-mission-2-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Essaye d'atteindre 10 000 mètres d'altitude. Apprends à garder ta fusée bien droite avec les touches Z, Q, S, D.</p>
+     </div>
+     <div data-template-id="s5-mission-3" class="canva-card p-5 rounded-xl" style="background: rgb(17, 24, 39);">
+      <h3 data-template-id="s5-mission-3-title" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Mission "La frontière de l'espace"</h3>
+      <p data-template-id="s5-mission-3-desc" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Ton objectif : atteindre 100 000 mètres. C'est là que le ciel devient noir et que tu deviens officiellement astronaute !</p>
+     </div>
+    </div>
+   </section><!-- Section 6: Improvement -->
+   <section class="mb-14">
+    <h2 data-template-id="s6-heading" class="canva-text mb-4" style="color: rgb(52, 211, 153); font-weight: 800; font-style: normal; font-size: 26px;">6. Laboratoire d'idées : Comment améliorer ta fusée ?</h2>
+    <p data-template-id="s6-intro" class="canva-text mb-4" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Maintenant que tu as compris le fonctionnement, voici quelques pistes pour faire évoluer ton engin :</p>
+    <blockquote data-template-id="s6-quote" class="canva-text italic border-l-4 border-emerald-400 pl-4 mb-6" style="color: rgb(52, 211, 153); font-weight: 400; font-style: normal; font-size: 16px;">"Le secret de l'ingénieur, c'est l'observation. Si ça explose, demande-toi : pourquoi ?"</blockquote>
+    <ul class="space-y-3 ml-1">
+     <li><p data-template-id="s6-tip-1" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• La stabilité en vol : Si ta fusée tournoie, ajoute des ailerons ou des moteurs orientables.</p></li>
+     <li><p data-template-id="s6-tip-2" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• La puissance brute : Plus de carburant = plus lourd. Comment compenser ?</p></li>
+     <li><p data-template-id="s6-tip-3" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• L'efficacité du retour : L'impact est trop fort ? Comment ralentir davantage la capsule ?</p></li>
+     <li><p data-template-id="s6-tip-4" class="canva-text" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">• Le design aéro : Comment rendre le "nez" de ta fusée plus aérodynamique ?</p></li>
+    </ul>
+    <aside data-template-id="s6-challenge-box" class="canva-panel mt-6 p-5 rounded-xl border-l-4 border-purple-400" style="background: rgb(26, 21, 40);">
+     <h3 data-template-id="s6-challenge-title" class="canva-text font-bold mb-2" style="color: rgb(192, 132, 252); font-weight: 700; font-style: normal; font-size: 19px;">🎨 Petit défi créatif</h3>
+     <p data-template-id="s6-challenge-text" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Essaye de construire une fusée qui ne ressemble pas à une simple colonne. Que se passe-t-il avec plusieurs moteurs ou des boosters à poudre ?</p>
+    </aside>
+	
+   </section>
+   <!-- Footer -->
+   <footer class="rounded-xl overflow-hidden"><img data-template-id="footer-image" class="canva-image w-full h-120 object-cover" loading="lazy" src="assets/KSP/kerbal_space.png" alt="Kerbal floating in space.">
+   </footer>
+  </main>
+
+</body></html>

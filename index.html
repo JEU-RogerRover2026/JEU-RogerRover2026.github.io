@@ -42,8 +42,8 @@
             <a href="candidature.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 py-3 rounded-xl transition">
                 Candidater
             </a>
-            <a href="#" onclick="netlifyIdentity.open();" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 py-3 rounded-xl transition">
-                Espace Revues (Connexion)
+            <a href="espace-membres.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 py-3 rounded-xl transition">
+                Espace Revues
             </a>
         </div>
     </div>
@@ -88,6 +88,7 @@
         <div class="glass-card p-8 rounded-2xl text-center flex flex-col justify-between">
             <div>
                 <h3 class="text-xl font-orbitron text-purple-400 mb-4">SCANNEUR STELLAIRE QUANTIQUE</h3>
+				<p class="text-sm text-slate-400 mb-4 font-mono">Calibrez l'instrument en entrant votre date de naissance :</p>
                 <div class="flex justify-center gap-2 mb-4">
                     <input type="number" id="jour" min="1" max="31" placeholder="JJ" class="bg-slate-900 p-2 w-20 rounded border border-slate-700 text-center text-white font-bold focus:outline-none focus:border-purple-500">
                     <input type="number" id="mois" min="1" max="12" placeholder="MM" class="bg-slate-900 p-2 w-20 rounded border border-slate-700 text-center text-white font-bold focus:outline-none focus:border-purple-500">
@@ -727,12 +728,21 @@
     }
     updateMoon();
     setInterval(updateMoon, 60000);
-
-    window.netlifyIdentitySettings = {
-    locale: 'fr'
-  };
 </script>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+    if (window.netlifyIdentity) {
+        // Si l'utilisateur est déjà connecté en arrivant sur la page
+        netlifyIdentity.on("init", user => {
+            if (user) {
+                window.location.replace("espace-membres.html");
+            }
+        });
+        // Si l'utilisateur vient de se connecter via le bouton
+        netlifyIdentity.on("login", user => {
+            window.location.replace("espace-membres.html");
+        });
+    }
+</script>
 </body>
 </html>
-
