@@ -16,12 +16,6 @@
             netlifyIdentity.on('init', user => {
                 if (!user) {
                     window.location.replace("index.html");
-                } else {
-                    // Mise à jour du nom du cadet
-                    const userNameDisplay = document.getElementById('cadetName');
-                    if (userNameDisplay) {
-                        userNameDisplay.innerText = user.user_metadata?.full_name || "Anonyme";
-                    }
                 }
             });
 
@@ -70,7 +64,7 @@
             TABLEAU DE BORD <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">ORBITAL</span>
         </h1>
         <p class="text-lg text-slate-400">
-            Bienvenue dans votre centre de contrôle, Cadet <span id="cadetName" class="text-cyan-300 font-bold uppercase"></span>.
+            Bienvenue dans votre centre de contrôle, Cadet.
             Sélectionnez une revue spatiale pour débuter votre entraînement théorique.
         </p>
     </div>
