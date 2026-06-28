@@ -34,34 +34,35 @@
     </script>
     <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-        window.onload = function() {
+    window.onload = function() {
             if (window.netlifyIdentity) {
+                // Sécurité : Éjection si le cadet n'est pas connecté
                 netlifyIdentity.on('init', user => {
                     if (!user) {
-                        // Accès refusé : éjection immédiate
                         window.location.replace("index.html");
-                    } else {
-                        // Si la page contient l'élément cadetName, on le met à jour
-                        const userNameDisplay = document.getElementById('cadetName');
-                        if (userNameDisplay) {
-                            userNameDisplay.innerText = user.user_metadata?.full_name || "Anonyme";
-                        }
                     }
                 });
-
-                // Déconnexion
+                // Redirection après l'action de déconnexion
                 netlifyIdentity.on('logout', () => {
                     window.location.replace("index.html");
                 });
             }
+            
+            // --- TES AUTRES FONCTIONS WINDOW.ONLOAD DEJA PRESENTES ---
+            // Garde bien tes fonctions existantes ici (resetSim(), drawChessDemo(), etc.)
+            if (typeof resetSim === "function") resetSim();
+            if (typeof drawChessDemo === "function") drawChessDemo();
+            if (typeof renderChessBoard === "function") renderChessBoard();
+            if (typeof updateProgress === "function") updateProgress();
         };
 
-        // Fonction attachée au bouton DÉCONNEXION
+        // Fonction déclenchée par le bouton de déconnexion
         function triggerLogout() {
             if (window.netlifyIdentity) {
                 netlifyIdentity.logout();
             }
         }
+    }
     </script>
     <style>
         body {
@@ -142,6 +143,9 @@
                     <span class="text-slate-400 font-bold uppercase font-orbitron">👤 Fait par :</span>
                     <span id="explorer-name" class="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-spaceOrange font-bold outline-none placeholder-slate-600 w-40">L'Académie de l'Espace</span>
                 </div>
+                <button onclick="triggerLogout()" class="flex items-center gap-2 bg-red-900/40 hover:bg-red-600 border border-red-700/50 text-red-200 hover:text-white px-4 py-2 rounded-lg font-orbitron text-xs tracking-wider transition font-bold">
+                    <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+                </button>
             </div>
         </div>
     </header>
