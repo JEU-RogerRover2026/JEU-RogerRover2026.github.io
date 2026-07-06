@@ -42,7 +42,7 @@
             <a href="candidature.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 py-3 rounded-xl transition">
                 Candidater
             </a>
-            <button onclick="openLoginModal()" class="bg-purple-600 hover:bg-purple-500 border border-purple-500 px-6 py-3 rounded-xl transition text-white font-bold font-orbitron tracking-wide shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+            <button id="loginBtn" onclick="openLoginModal()" class="bg-purple-600 hover:bg-purple-500 border border-purple-500 px-6 py-3 rounded-xl transition text-white font-bold font-orbitron tracking-wide shadow-[0_0_15px_rgba(168,85,247,0.4)]">
 				Connexion / Espace Revues
 			</button>
         </div>
@@ -234,7 +234,7 @@
         if (!target) return;
         
         if (diff <= 0) {
-            target.innerText = "Inscriptions closes !";
+            target.innerText = "Les inscriptions sont closes !";
             return;
         }
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -760,15 +760,26 @@
 	<script>
 		// --- GESTION DE LA CONNEXION MANUELLE ---
 		
-		// Redirection automatique si déjà connecté
-		if (localStorage.getItem('jeu_auth') === 'true') {
-			window.location.replace("espace-membres.html");
+		// 1. Mise à jour de l'affichage du bouton dès la lecture du script
+		const btn = document.getElementById('loginBtn');
+		if (btn) {
+			if (localStorage.getItem('jeu_auth') === 'true') {
+				btn.innerText = "Espace Revues";
+			} else {
+				btn.innerText = "Connexion : Espace Revues";
+			}
 		}
 
+		// 2. Clic sur le bouton (Redirection ou Modale)
 		function openLoginModal() { 
-			document.getElementById('loginModal').classList.remove('hidden'); 
+			if (localStorage.getItem('jeu_auth') === 'true') {
+				window.location.href = "espace-membres.html";
+			} else {
+				document.getElementById('loginModal').classList.remove('hidden'); 
+			}
 		}
 		
+		// 3. Fermeture de la modale
 		function closeLoginModal() {
 			document.getElementById('loginModal').classList.add('hidden');
 			document.getElementById('loginError').classList.add('hidden');
@@ -776,6 +787,7 @@
 			document.getElementById('loginPass').value = '';
 		}
 
+		// 4. Tentative de connexion
 		function attemptLogin() {
 			const user = document.getElementById('loginUser').value.trim().toLowerCase();
 			const pass = document.getElementById('loginPass').value;
@@ -786,19 +798,20 @@
 			// ---------------------------------
 
 			if (user === validUser && pass === validPass) {
-				// Sauvegarde de l'état de connexion dans le navigateur
 				localStorage.setItem('jeu_auth', 'true');
 				window.location.href = 'espace-membres.html';
 			} else {
-				// Affichage de l'erreur
 				document.getElementById('loginError').classList.remove('hidden');
 			}
 		}
 
-		// Permettre la validation avec la touche "Entrée"
-		document.getElementById('loginPass').addEventListener('keypress', function (e) {
-			if (e.key === 'Enter') attemptLogin();
-		});
+		// 5. Permettre la validation avec la touche "Entrée"
+		const passInput = document.getElementById('loginPass');
+		if (passInput) {
+			passInput.addEventListener('keypress', function (e) {
+				if (e.key === 'Enter') attemptLogin();
+			});
+		}
 	</script>
 </body>
 </html>

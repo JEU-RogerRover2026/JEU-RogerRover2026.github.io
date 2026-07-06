@@ -30,6 +30,7 @@
         .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); border: 1px solid #1e293b; }
         .locked-card { background: rgba(15, 23, 42, 0.3); border: 1px dashed #334155; opacity: 0.6; filter: grayscale(80%); }
     </style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -38,14 +39,35 @@
         <div class="font-orbitron font-black text-xl tracking-widest text-white">
             J.E.U. <span class="text-cyan-400">HUB</span>
         </div>
-        <div class="flex gap-4 items-center">
-            <a href="index.html" class="text-sm font-bold text-slate-400 hover:text-cyan-400 transition hidden md:block">Retour à l'accueil</a>
-            
-            <button onclick="triggerLogout()" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-900/50 hover:border-red-500 px-4 py-2 rounded-lg text-sm font-bold transition font-orbitron">
-                DÉCONNEXION
-            </button>
-            
-        </div>
+		<div class="flex gap-4 items-center">
+
+		  <!-- Accueil -->
+		  <button onclick="window.location.href='index.html'"
+			class="flex items-center gap-2 
+				   bg-cyan-600/20 hover:bg-cyan-600 
+				   text-cyan-400 hover:text-white 
+				   border border-cyan-900/50 hover:border-cyan-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-house"></i> RETOUR À L'ACCUEIL
+		  </button>
+
+		  <!-- Déconnexion -->
+		  <button onclick="triggerLogout()"
+			class="flex items-center gap-2 
+				   bg-red-600/20 hover:bg-red-600 
+				   text-red-400 hover:text-white 
+				   border border-red-900/50 hover:border-red-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+		  </button>
+
+		</div>
     </div>
 </nav>
 
