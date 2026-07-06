@@ -42,9 +42,9 @@
             <a href="candidature.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 py-3 rounded-xl transition">
                 Candidater
             </a>
-            <button onclick="netlifyIdentity.open()" class="bg-purple-600 hover:bg-purple-500 border border-purple-500 px-6 py-3 rounded-xl transition text-white font-bold font-orbitron tracking-wide">
-                Connexion / Espace Revues
-            </button>
+            <button onclick="openLoginModal()" class="bg-purple-600 hover:bg-purple-500 border border-purple-500 px-6 py-3 rounded-xl transition text-white font-bold font-orbitron tracking-wide shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+				Connexion / Espace Revues
+			</button>
         </div>
     </div>
 </header>
@@ -729,20 +729,76 @@
     updateMoon();
     setInterval(updateMoon, 60000);
 </script>
-<script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-    if (window.netlifyIdentity) {
-        // Si l'utilisateur est déjà connecté en arrivant sur la page
-        netlifyIdentity.on("init", user => {
-            if (user) {
-                window.location.replace("espace-membres.html");
-            }
-        });
-        // Si l'utilisateur vient de se connecter via le bouton
-        netlifyIdentity.on("login", user => {
-            window.location.replace("espace-membres.html");
-        });
-    }
-</script>
+	<div id="loginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
+		<div class="glass-card p-8 rounded-2xl w-full max-w-md relative border-cyan-500/30 shadow-[0_0_30px_rgba(34,211,238,0.1)]">
+			<button onclick="closeLoginModal()" class="absolute top-4 right-5 text-slate-400 hover:text-red-400 font-bold font-orbitron text-xl transition">X</button>
+			
+			<h3 class="text-2xl font-orbitron text-cyan-400 mb-2 text-center">IDENTIFICATION</h3>
+			<p class="text-xs text-slate-400 text-center mb-6 font-mono uppercase tracking-widest">Connexion sécurisée au Hub J.E.U.</p>
+			
+			<div class="space-y-4">
+				<div>
+					<label class="block text-sm text-slate-300 font-orbitron mb-1 tracking-wide">ID CADET</label>
+					<input type="text" id="loginUser" class="w-full bg-slate-900/80 p-3 rounded-lg border border-slate-700 text-white focus:border-cyan-500 focus:outline-none font-mono" placeholder="Entrez votre identifiant">
+				</div>
+				<div>
+					<label class="block text-sm text-slate-300 font-orbitron mb-1 tracking-wide">CODE D'ACCÈS</label>
+					<input type="password" id="loginPass" class="w-full bg-slate-900/80 p-3 rounded-lg border border-slate-700 text-white focus:border-cyan-500 focus:outline-none font-mono" placeholder="••••••••">
+				</div>
+				
+				<div id="loginError" class="hidden bg-red-900/30 border border-red-500/50 text-red-400 text-sm font-bold text-center p-2 rounded-lg font-orbitron tracking-wide mt-2">
+					ACCÈS REFUSÉ. COORDONNÉES INVALIDES.
+				</div>
+				
+				<button onclick="attemptLogin()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-black font-black font-orbitron py-3 rounded-xl transition tracking-widest mt-6 shadow-lg shadow-cyan-500/20 active:scale-95">
+					DÉMARRER LA SESSION
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// --- GESTION DE LA CONNEXION MANUELLE ---
+		
+		// Redirection automatique si déjà connecté
+		if (localStorage.getItem('jeu_auth') === 'true') {
+			window.location.replace("espace-membres.html");
+		}
+
+		function openLoginModal() { 
+			document.getElementById('loginModal').classList.remove('hidden'); 
+		}
+		
+		function closeLoginModal() {
+			document.getElementById('loginModal').classList.add('hidden');
+			document.getElementById('loginError').classList.add('hidden');
+			document.getElementById('loginUser').value = '';
+			document.getElementById('loginPass').value = '';
+		}
+
+		function attemptLogin() {
+			const user = document.getElementById('loginUser').value.trim().toLowerCase();
+			const pass = document.getElementById('loginPass').value;
+			
+			// --- IDENTIFIANTS HARDCODÉS ICI ---
+			const validUser = "cadet";
+			const validPass = "roger2026";
+			// ---------------------------------
+
+			if (user === validUser && pass === validPass) {
+				// Sauvegarde de l'état de connexion dans le navigateur
+				localStorage.setItem('jeu_auth', 'true');
+				window.location.href = 'espace-membres.html';
+			} else {
+				// Affichage de l'erreur
+				document.getElementById('loginError').classList.remove('hidden');
+			}
+		}
+
+		// Permettre la validation avec la touche "Entrée"
+		document.getElementById('loginPass').addEventListener('keypress', function (e) {
+			if (e.key === 'Enter') attemptLogin();
+		});
+	</script>
 </body>
 </html>

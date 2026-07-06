@@ -7,31 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-        // SÉCURITÉ : S'exécute immédiatement (hors du window.onload)
-        if (window.netlifyIdentity) {
-            
-            // 1. Éjection si l'utilisateur n'est pas connecté
-            netlifyIdentity.on('init', user => {
-                if (!user) {
-                    window.location.replace("index.html");
-                }
-            });
+		// SÉCURITÉ : Vérification de l'authentification locale
+		// S'exécute immédiatement pour éviter le clignotement de la page
+		if (localStorage.getItem('jeu_auth') !== 'true') {
+			// Éjection si le tag n'est pas présent
+			window.location.replace("index.html");
+		}
 
-            // 2. Éjection dès que la déconnexion est validée
-            netlifyIdentity.on('logout', () => {
-                window.location.replace("index.html");
-            });
-        }
-
-        // 3. Fonction déclenchée par ton bouton HTML "DÉCONNEXION"
-        function triggerLogout() {
-            if (window.netlifyIdentity) {
-                netlifyIdentity.logout();
-            }
-        }
-    </script>
+		// Fonction déclenchée par ton bouton HTML "DÉCONNEXION"
+		function triggerLogout() {
+			// On supprime la clé d'authentification
+			localStorage.removeItem('jeu_auth');
+			// On renvoie à l'accueil
+			window.location.replace("index.html");
+		}
+	</script>
 
     <style>
         body { font-family: 'Space Grotesk', sans-serif; background: #070a13; color: #e2e8f0; }
