@@ -3,150 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RogerRover 2026 - Association J.E.U.</title>
+    <title>Espace Revues - J.E.U.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+		// SÉCURITÉ : Vérification de l'authentification locale
+		// S'exécute immédiatement pour éviter le clignotement de la page
+		if (localStorage.getItem('jeu_auth') !== 'true') {
+			// Éjection si le tag n'est pas présent
+			window.location.replace("index.html");
+		}
+
+		// Fonction déclenchée par ton bouton HTML "DÉCONNEXION"
+		function triggerLogout() {
+			// On supprime la clé d'authentification
+			localStorage.removeItem('jeu_auth');
+			// On renvoie à l'accueil
+			window.location.replace("index.html");
+		}
+	</script>
+
     <style>
         body { font-family: 'Space Grotesk', sans-serif; background: #070a13; color: #e2e8f0; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); border: 1px solid #1e293b; }
-        #gameCanvas { background: #020408; border: 2px solid #38bdf8; display: block; margin: 20px auto; max-width: 100%; height: auto; }
-        #scannerCanvas { background: #020408; border: 1px solid #475569; display: block; margin: 15px auto; }
-        .moon { margin-top: 15px; font-size: 18px; color: #cfd8ff; position: relative; z-index: 2; }
+        .locked-card { background: rgba(15, 23, 42, 0.3); border: 1px dashed #334155; opacity: 0.6; filter: grayscale(80%); }
     </style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-<header class="relative py-20 px-6 text-center border-b border-slate-800">
-    <div class="max-w-5xl mx-auto">
-        <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm">
-            Association J.E.U. • Programme Inaugural 2026
-        </span>
+<nav class="bg-slate-900/80 backdrop-blur border-b border-slate-800 p-4 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="font-orbitron font-black text-xl tracking-widest text-white">
+            J.E.U. <span class="text-cyan-400">HUB</span>
+        </div>
+		<div class="flex gap-4 items-center">
 
-        <h1 class="text-5xl md:text-7xl font-orbitron font-black text-white mt-4 mb-6">
-            ROGER<span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">ROVER</span> 2026
+		  <!-- Accueil -->
+		  <button type="button" onclick="window.location.href='index.html'"
+			class="flex items-center gap-2 
+				   bg-cyan-600/20 hover:bg-cyan-600 
+				   text-cyan-400 hover:text-white 
+				   border border-cyan-900/50 hover:border-cyan-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-house"></i> RETOUR À L'ACCUEIL
+		  </button>
+
+		  <!-- Déconnexion -->
+		  <button type="button" onclick="triggerLogout()"
+			class="flex items-center gap-2 
+				   bg-red-600/20 hover:bg-red-600 
+				   text-red-400 hover:text-white 
+				   border border-red-900/50 hover:border-red-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+		  </button>
+
+		</div>
+    </div>
+</nav>
+
+<header class="py-12 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-orbitron font-black text-white mb-4">
+            TABLEAU DE BORD <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">ORBITAL</span>
         </h1>
-
-        <p class="text-xl text-slate-400 italic mb-8">
-            "Explorer, c'est savoir échouer souvent, mais surtout, ne jamais cesser d'essayer."
+        <p class="text-lg text-slate-400">
+            Bienvenue dans votre centre de contrôle, Cadet.
+            Sélectionnez une revue spatiale pour débuter votre entraînement théorique.
         </p>
-
-        <div id="countdown" class="text-2xl font-orbitron text-orange-500 border border-orange-500/30 p-4 rounded-lg inline-block">
-            Calcul du vecteur temporel...
-        </div>
-
-        <div class="mt-10 flex justify-center gap-4 flex-wrap">
-            <a href="index.html" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-xl transition">
-                Accueil
-            </a>
-            <a href="candidature.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 py-3 rounded-xl transition">
-                Candidater
-            </a>
-            <button id="loginBtn" onclick="openLoginModal()" class="bg-purple-600 hover:bg-purple-500 border border-purple-500 px-6 py-3 rounded-xl transition text-white font-bold font-orbitron tracking-wide shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-				Connexion / Espace Revues
-			</button>
-        </div>
     </div>
 </header>
 
-<main class="max-w-6xl mx-auto py-12 px-6">
-    <div class="grid md:grid-cols-2 gap-8 mb-12">
-        <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
-            <div>
-                <h3 class="text-2xl font-orbitron text-cyan-400 mb-6">
-                    OBJECTIF : Programme RogerRover2026
-                </h3>
-                <p class="mb-5">
-                    Bienvenue dans l'aventure scientifique la plus stimulante de votre scolarité.
-                    Pour cette <strong>toute première année de lancement</strong>,
-                    l'association J.E.U. a conçu un programme unique pensé comme un véritable plan
-                    de vol destiné aux esprits curieux et audacieux.
-                </p>
-                <p class="mb-5">
-                    Notre mission ? Vous placer en orbite autour de la théorie spatiale à travers
-                    notre <span class="text-orange-400 font-bold">Cycle des 12 Revues Spatiales</span>.
-                    De la mécanique des forces d'attraction à la logistique complexe de l'ISS,
-                    chaque revue est une expédition en soi.
-                </p>
-                <p class="mb-6">
-                    <strong>Paramètres de la mission :</strong>
-                    Chaque nouvelle revue scientifique ne se débloque qu'à une seule condition :
-                    réussir le test de validation de la précédente.
-                </p>
-            </div>
-            
-            <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800/80 text-center">
-                <div class="moon font-orbitron text-sm uppercase tracking-wider !mt-0 mb-2">
-                    🌙 Surveillance Orbitale : <span id="moonPhase" class="text-cyan-400 font-bold">Analyse...</span>
-                </div>
-                <p class="text-xs text-slate-400 leading-relaxed max-w-sm mx-auto">
-                    Ce module synchronise nos paramètres de vol avec la phase lunaire actuelle. Il s'agit d'un indicateur de télémétrie essentiel pour calculer l'influence des marées gravitationnelles et déterminer nos fenêtres de lancement optimales.
-                </p>
-            </div>
-        </div>
-
-        <div class="glass-card p-8 rounded-2xl text-center flex flex-col justify-between">
-            <div>
-                <h3 class="text-xl font-orbitron text-purple-400 mb-4">SCANNEUR STELLAIRE QUANTIQUE</h3>
-				<p class="text-sm text-slate-400 mb-4 font-mono">Calibrez l'instrument en entrant votre date de naissance :</p>
-                <div class="flex justify-center gap-2 mb-4">
-                    <input type="number" id="jour" min="1" max="31" placeholder="JJ" class="bg-slate-900 p-2 w-20 rounded border border-slate-700 text-center text-white font-bold focus:outline-none focus:border-purple-500">
-                    <input type="number" id="mois" min="1" max="12" placeholder="MM" class="bg-slate-900 p-2 w-20 rounded border border-slate-700 text-center text-white font-bold focus:outline-none focus:border-purple-500">
-                    <button onclick="genererConstellation()" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded-lg font-bold transition font-orbitron tracking-wide text-sm">SCANNER</button>
-                </div>
-            </div>
-            
-            <div class="relative flex-grow flex flex-col justify-center items-center mt-4">
-                <canvas id="scannerCanvas" width="320" height="240" class="rounded-xl shadow-inner"></canvas>
-                <div id="resultat" class="mt-4 font-orbitron text-sm font-bold text-cyan-300 min-h-[20px]">
-                    En attente de coordonnées de naissance...
-                </div>
-            </div>
-        </div>
+<main class="max-w-6xl mx-auto py-8 px-6 flex-grow w-full">
+    
+    <div class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-end">
+        <h2 class="text-2xl font-orbitron text-cyan-400">CYCLE DES 12 REVUES</h2>
+        <div class="text-sm text-slate-500 font-mono">Progression : <span class="text-white">1/12</span></div>
     </div>
 
-    <section class="glass-card p-6 rounded-2xl text-center mb-12">
-        <h3 class="text-2xl font-orbitron text-white mb-1">DÉFENSE DE L'ORBITE</h3>
-        <p class="text-xs text-slate-400 mb-4 uppercase tracking-widest font-orbitron">Alerte : Incursion Alien détectée • Utilisez les bunkers 🛡️</p>
-        
-        <canvas id="gameCanvas" width="600" height="380" class="rounded-xl shadow-2xl shadow-cyan-950/20"></canvas>
-        
-        <div class="flex justify-between items-center max-w-xl mx-auto mt-2 px-2 font-orbitron text-md text-slate-300">
-            <div id="score">Score : 0</div>
-            <div id="gameWave" class="text-orange-400">Vague : 1</div>
-            <div id="bossHpContainer" class="hidden text-red-400 font-bold">BOSS HP: <span id="bossHp">0</span></div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <div class="mt-6">
-            <button onclick="startGame()" class="bg-cyan-500 hover:bg-cyan-400 text-black px-8 py-3 rounded-xl font-black font-orbitron tracking-wider shadow-lg shadow-cyan-500/20 transition transform active:scale-95">
-                LANCER SYSTÈMES / RESET
-            </button>
-        </div>
+		<div class="glass-card rounded-xl p-6 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.15)] flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-cyan-500 text-black font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 01</span>
+				<span class="text-green-400 text-sm font-bold">🟢 ACCESSIBLE</span>
+			</div>
+			<h3 class="text-xl font-bold text-white mb-3 leading-tight">La Chute Libre Permanente</h3>
+			<p class="text-slate-400 text-sm mb-6 flex-grow">
+				Pourquoi un satellite ne tombe-t-il jamais sur Terre ? Découvrez le principe fascinant de l'orbite grâce à une explication intuitive mêlant gravité, vitesse et chute libre.
+			</p>
+			<a href="revues/revue1/revue_1.html" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-orbitron font-bold py-3 rounded-lg transition">
+				CONSULTER
+			</a>
+		</div>
 
-        <div class="mt-6 flex justify-center gap-3 md:hidden">
-            <button id="btnLeft" class="bg-slate-800 text-white w-16 h-16 rounded-2xl border border-slate-700 text-2xl font-bold font-orbitron active:bg-cyan-500 active:text-black select-none">←</button>
-            <button id="btnFire" class="bg-red-600 text-white px-8 h-16 rounded-2xl border border-red-500 font-black font-orbitron tracking-widest active:bg-red-400 select-none">TIRER</button>
-            <button id="btnRight" class="bg-slate-800 text-white w-16 h-16 rounded-2xl border border-slate-700 text-2xl font-bold font-orbitron active:bg-cyan-500 active:text-black select-none">→</button>
-        </div>
-        <p class="hidden md:block text-xs text-slate-500 mt-4 font-mono">Utilisez les touches ◄ et ► pour vous déplacer, et ESPACE pour faire feu.</p>
-    </section>
-	
-    <section class="glass-card p-8 rounded-2xl mb-12 text-center">
-        <h3 class="text-2xl font-orbitron text-cyan-400 mb-6">Nos partenaires</h3>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div>
-                <h4 class="uppercase tracking-widest text-slate-400 mb-3 font-orbitron text-sm">Institutionnels</h4>
-                <p class="text-slate-300 font-medium">CNES</p>
-                <p class="text-slate-300 font-medium">ESA</p>
-                <p class="text-slate-300 font-medium">Cité de l'Espace de Toulouse</p>
-            </div>
-            <div>
-                <h4 class="uppercase tracking-widest text-slate-400 mb-3 font-orbitron text-sm">Académiques</h4>
-                <p class="text-slate-300 font-medium">Observatoire de Paris</p>
-                <p class="text-slate-300 font-medium">Université Paris-Saclay</p>
-            </div>
-        </div>
-    </section>
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 02</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">L'Anatomie d'un Satellite</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Pourquoi certains satellites restent-ils immobiles au-dessus de la Terre tandis que d'autres la survolent plusieurs fois par jour ? Découvrez les grandes familles d'orbites (LEO, MEO, GEO...) et les missions auxquelles elles sont destinées.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 03</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">La Conquête des Orbites</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Comment place-t-on un satellite en orbite ? Des bases de lancement au calcul de l'orbite de l'ISS, découvrez les étapes qui transforment une fusée en satellite opérationnel.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 04</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">La Lune en Ligne de Mire</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Découvrez comment les segments spatial, sol et utilisateur coopèrent pour faire fonctionner un système satellitaire, avant de maîtriser la géométrie des orbites avec les notions de périgée, d'apogée et les premières lois de Kepler.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 05</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">Le Réseau Terrestre</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Entrez dans les coulisses des opérations spatiales : centres de contrôle, antennes paraboliques, téléports et réseaux de communication qui permettent de piloter les satellites en permanence.
+			</p>
+		</div>
+
+		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+			<div class="flex justify-between items-start mb-4">
+				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 06</span>
+				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+			</div>
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">GEOINT & Télédétection</h3>
+			<p class="text-slate-500 text-sm mb-6 flex-grow">
+				Découvrez comment les satellites transforment la lumière réfléchie par la Terre en images exploitables et en données stratégiques pour la cartographie, l'environnement, l'agriculture ou le renseignement.
+			</p>
+		</div>
+
+    </div>
 </main>
 
 <footer class="mt-16 border-t border-slate-800 pt-12 pb-8 px-4 text-center">
@@ -163,655 +178,5 @@
     </div>
 </footer>
 
-<script>
-    // --- SYNTHÉTISEUR AUDIO ---
-    let audioCtx = null;
-    let ambientOsc = null;
-
-    function initAudio() {
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            startSpaceAmbient();
-        } catch (e) { console.warn("L'API Web Audio est bloquée."); }
-    }
-
-    function startSpaceAmbient() {
-        try {
-            if (!audioCtx || ambientOsc) return;
-            ambientOsc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            ambientOsc.type = 'sine';
-            ambientOsc.frequency.value = 55; 
-            gain.gain.value = 0.03;
-            ambientOsc.connect(gain);
-            gain.connect(audioCtx.destination);
-            ambientOsc.start();
-        } catch (e) {}
-    }
-
-    function playSoundLaser() {
-        try {
-            if (!audioCtx || audioCtx.state === 'suspended') return;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(550, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        } catch(e) {}
-    }
-
-    function playSoundExplosion(isBoss = false) {
-        try {
-            if (!audioCtx || audioCtx.state === 'suspended') return;
-            let duration = isBoss ? 0.5 : 0.2;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(isBoss ? 100 : 200, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(20, audioCtx.currentTime + duration);
-            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
-        } catch(e) {}
-    }
-
-    // --- COMPTE À REBOURS ---
-    const finInscriptions = new Date("July 12, 2026 23:59:00").getTime();
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const diff = finInscriptions - now;
-        const target = document.getElementById("countdown");
-        if (!target) return;
-        
-        if (diff <= 0) {
-            target.innerText = "Les inscriptions sont closes !";
-            return;
-        }
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        target.innerText = `Fin des inscriptions dans : ${d}j ${h}h ${m}m`;
-    }
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // --- SCANNEUR STELLAIRE ---
-    const scanCanvas = document.getElementById('scannerCanvas');
-    const scanCtx = scanCanvas.getContext('2d');
-    let scanTimeout = null;
-
-    function clearScannerCanvas() {
-        if (!scanCtx) return;
-        scanCtx.fillStyle = '#020408';
-        scanCtx.fillRect(0, 0, scanCanvas.width, scanCanvas.height);
-        scanCtx.strokeStyle = 'rgba(147, 51, 234, 0.12)';
-        scanCtx.lineWidth = 1;
-        for(let i=0; i<scanCanvas.width; i+=40) { scanCtx.beginPath(); scanCtx.moveTo(i, 0); scanCtx.lineTo(i, scanCanvas.height); scanCtx.stroke(); }
-        for(let j=0; j<scanCanvas.height; j+=40) { scanCtx.beginPath(); scanCtx.moveTo(0, j); scanCtx.lineTo(scanCanvas.width, j); scanCtx.stroke(); }
-    }
-    clearScannerCanvas();
-
-    const constellations = {
-        "Bélier": [[60,120], [130,95], [210,125], [260,155]],
-        "Taureau": [[50,70], [115,95], [155,115], [230,115], [270,80], [155,115], [125,175], [65,205]],
-        "Gémeaux": [[60,60], [120,70], [210,80], [250,90], [240,170], [185,165], [105,155], [55,145], [60,60], [55,145], [120,70], [105,155]],
-        "Cancer": [[90,70], [160,115], [152,175], [160,115], [230,145]],
-        "Lion": [[65,175], [135,165], [175,120], [235,110], [255,65], [215,45], [175,55], [175,120], [135,165], [95,110], [65,175]],
-        "Vierge": [[55,65], [105,95], [155,115], [215,105], [265,145], [205,175], [155,115], [135,165], [85,155]],
-        "Balance": [[85,125], [165,75], [235,115], [175,165], [85,125]],
-        "Scorpion": [[65,65], [115,75], [145,115], [135,165], [165,195], [215,175], [245,135], [225,105]],
-        "Sagittaire": [[65,135], [115,95], [175,105], [235,145], [175,195], [115,95], [65,135], [175,105], [195,65]],
-        "Capricorne": [[65,85], [135,65], [235,95], [265,145], [195,185], [115,155], [65,85]],
-        "Verseau": [[55,85], [115,95], [145,135], [205,125], [255,175], [215,205], [145,135]],
-        "Poissons": [[45,105], [95,95], [145,115], [195,145], [255,175], [225,205], [145,115]]
-    };
-
-    function getZodiacSign(day, month) {
-        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Verseau";
-        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Poissons";
-        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Bélier";
-        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taureau";
-        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return "Gémeaux";
-        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return "Cancer";
-        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "Lion";
-        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "Vierge";
-        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return "Balance";
-        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return "Scorpion";
-        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return "Sagittaire";
-        return "Capricorne";
-    }
-
-    function genererConstellation() {
-        initAudio();
-        const d = parseInt(document.getElementById('jour').value);
-        const m = parseInt(document.getElementById('mois').value);
-        
-        if (isNaN(d) || isNaN(m) || d < 1 || d > 31 || m < 1 || m > 12) {
-            document.getElementById('resultat').innerText = "Erreur : Coordonnées non valides.";
-            return;
-        }
-
-        const signe = getZodiacSign(d, m);
-        document.getElementById('resultat').innerText = `Analyse... Signature détectée : ${signe}`;
-        
-        const points = constellations[signe] || constellations["Bélier"];
-        let step = 0;
-        
-        if (scanTimeout) clearTimeout(scanTimeout);
-        
-        function animateScan() {
-            clearScannerCanvas();
-            
-            points.forEach(p => {
-                scanCtx.beginPath();
-                scanCtx.arc(p[0], p[1], 2, 0, Math.PI * 2);
-                scanCtx.fillStyle = 'rgba(34, 211, 238, 0.3)';
-                scanCtx.fill();
-            });
-
-            for (let i = 0; i <= step; i++) {
-                if(!points[i]) continue;
-                scanCtx.beginPath();
-                scanCtx.arc(points[i][0], points[i][1], 5, 0, Math.PI * 2);
-                scanCtx.fillStyle = '#22d3ee';
-                scanCtx.shadowBlur = 10;
-                scanCtx.shadowColor = '#22d3ee';
-                scanCtx.fill();
-                scanCtx.shadowBlur = 0;
-            }
-
-            if (step > 0) {
-                scanCtx.beginPath();
-                scanCtx.moveTo(points[0][0], points[0][1]);
-                for (let i = 1; i <= step; i++) {
-                    if(!points[i]) continue;
-                    scanCtx.lineTo(points[i][0], points[i][1]);
-                }
-                scanCtx.strokeStyle = 'rgba(168, 85, 247, 0.85)';
-                scanCtx.lineWidth = 2;
-                scanCtx.stroke();
-            }
-
-            if (step < points.length - 1) {
-                step++;
-                scanTimeout = setTimeout(animateScan, 180);
-            }
-        }
-        animateScan();
-    }
-
-
-    // --- MOTEUR ARCADIA : SPACE INVADERS ---
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let score = 0;
-    let wave = 1;
-    let gameActive = false;
-    let gameOver = false;
-    let keys = {};
-    
-    let player = { x: 285, y: 340, w: 35, h: 20, speed: 5 };
-    let bullets = [];
-    let alienBullets = [];
-    let aliens = [];
-    let particles = [];
-    let shields = [];
-    
-    let boss = { x: 250, y: 30, w: 90, h: 45, speed: 1.5, hp: 0, maxHp: 15, active: false, direction: 1 };
-
-    let starfield = [];
-    for(let i=0; i<35; i++) starfield.push({ x: Math.random()*600, y: Math.random()*380, size: Math.random()*1.2, speed: Math.random()*0.6 + 0.1 });
-    for(let i=0; i<15; i++) starfield.push({ x: Math.random()*600, y: Math.random()*380, size: Math.random()*2.2, speed: Math.random()*1.2 + 0.8 });
-
-    window.addEventListener("keydown", (e) => { 
-        keys[e.code] = true; 
-        if(e.code === "Space" && gameActive) { firePlayerBullet(); e.preventDefault(); } 
-    });
-    window.addEventListener("keyup", (e) => { keys[e.code] = false; });
-
-    let mobileLeft = false;
-    let mobileRight = false;
-    document.getElementById("btnLeft").addEventListener("touchstart", (e) => { mobileLeft = true; e.preventDefault(); }, {passive: false});
-    document.getElementById("btnLeft").addEventListener("touchend", () => mobileLeft = false);
-    document.getElementById("btnRight").addEventListener("touchstart", (e) => { mobileRight = true; e.preventDefault(); }, {passive: false});
-    document.getElementById("btnRight").addEventListener("touchend", () => mobileRight = false);
-    document.getElementById("btnFire").addEventListener("touchstart", (e) => { if(gameActive) firePlayerBullet(); e.preventDefault(); }, {passive: false});
-
-    function firePlayerBullet() {
-        if(bullets.length < 4) {
-            bullets.push({ x: player.x + player.w/2 - 2, y: player.y, w: 4, h: 10, speed: 7 });
-            playSoundLaser();
-        }
-    }
-
-    // Génération des Bunkers destructibles
-    function initShields() {
-        shields = [];
-        const shieldCount = 4;
-        const shieldWidth = 60;
-        const shieldHeight = 35;
-        const blockSize = 5;
-        const gap = (canvas.width - (shieldCount * shieldWidth)) / (shieldCount + 1);
-
-        for (let s = 0; s < shieldCount; s++) {
-            let startX = gap + s * (shieldWidth + gap);
-            let startY = player.y - 55; // Placés juste au dessus du joueur
-
-            for (let row = 0; row < shieldHeight / blockSize; row++) {
-                for (let col = 0; col < shieldWidth / blockSize; col++) {
-                    // Création de la forme arrondie en voute du bunker
-                    if (row < 2 && (col < 2 || col > (shieldWidth/blockSize)-3)) continue; 
-                    if (row > 3 && (col > 3 && col < (shieldWidth/blockSize)-4)) continue;
-
-                    shields.push({
-                        x: startX + col * blockSize,
-                        y: startY + row * blockSize,
-                        w: blockSize,
-                        h: blockSize,
-                        active: true
-                    });
-                }
-            }
-        }
-    }
-
-    function spawnAliens() {
-        aliens = [];
-        boss.active = false;
-        document.getElementById("bossHpContainer").classList.add("hidden");
-        
-        let rows = 3;
-        let cols = 7;
-        let baseSpeed = 0.9 + (wave * 0.3);
-        
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                aliens.push({ x: 70 + c * 65, y: 50 + r * 35, w: 30, h: 20, speed: baseSpeed, direction: 1 });
-            }
-        }
-    }
-
-    function spawnBoss() {
-        boss.active = true;
-        boss.x = 250;
-        boss.y = 40;
-        boss.maxHp = 12 + (wave * 4);
-        boss.hp = boss.maxHp;
-        boss.speed = 1.3 + (wave * 0.25);
-        document.getElementById("bossHpContainer").classList.remove("hidden");
-        document.getElementById("bossHp").innerText = boss.hp;
-    }
-
-    function createExplosion(x, y, color = "#a855f7") {
-        for(let i=0; i<8; i++) {
-            particles.push({
-                x: x, y: y,
-                vx: (Math.random() - 0.5) * 4,
-                vy: (Math.random() - 0.5) * 4,
-                radius: Math.random() * 2.5 + 1,
-                alpha: 1,
-                color: color
-            });
-        }
-    }
-
-    function startGame() {
-        initAudio();
-        score = 0;
-        wave = 1;
-        gameActive = true;
-        gameOver = false;
-        player.x = 285;
-        bullets = [];
-        alienBullets = [];
-        particles = [];
-        
-        document.getElementById('score').innerText = "Score : " + score;
-        document.getElementById('gameWave').innerText = "Vague : " + wave;
-        
-        initShields(); // Restauration des boucliers au lancement
-        spawnAliens();
-    }
-
-    function updateGame() {
-        ctx.fillStyle = "#020408";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        starfield.forEach(star => {
-            ctx.fillStyle = "rgba(255,255,255," + (star.speed / 2) + ")";
-            ctx.fillRect(star.x, star.y, star.size, star.size);
-            star.y += star.speed;
-            if(star.y > canvas.height) star.y = 0;
-        });
-
-        if (!gameActive) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
-            ctx.font = "20px 'Orbitron'";
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-            ctx.fillText(gameOver ? "GAME OVER - APPUYEZ SUR RESET" : "SYSTÈMES EN ATTENTE", canvas.width/2, canvas.height/2);
-            requestAnimationFrame(updateGame);
-            return; // On affiche le texte mais on ne met pas à jour la physique
-        }
-
-        // --- Logique du Joueur ---
-        if (keys["ArrowLeft"] || mobileLeft) player.x -= player.speed;
-        if (keys["ArrowRight"] || mobileRight) player.x += player.speed;
-        if (player.x < 0) player.x = 0;
-        if (player.x > canvas.width - player.w) player.x = canvas.width - player.w;
-
-        ctx.fillStyle = "#22d3ee";
-        ctx.beginPath();
-        ctx.moveTo(player.x + player.w/2, player.y);
-        ctx.lineTo(player.x + player.w, player.y + player.h);
-        ctx.lineTo(player.x, player.y + player.h);
-        ctx.closePath();
-        ctx.fill();
-
-        // --- Logique Tirs Joueur ---
-        for (let i = bullets.length - 1; i >= 0; i--) {
-            bullets[i].y -= bullets[i].speed;
-            ctx.fillStyle = "#38bdf8";
-            ctx.fillRect(bullets[i].x, bullets[i].y, bullets[i].w, bullets[i].h);
-            if (bullets[i].y < 0) bullets.splice(i, 1);
-        }
-
-        // --- Logique Tirs Aliens et Collisions Joueur ---
-        for (let i = alienBullets.length - 1; i >= 0; i--) {
-            let ab = alienBullets[i];
-            ab.y += ab.speed;
-            ctx.fillStyle = "#f43f5e";
-            ctx.fillRect(ab.x, ab.y, ab.w, ab.h);
-            
-            if (ab.x < player.x + player.w && ab.x + ab.w > player.x && ab.y < player.y + player.h && ab.y + ab.h > player.y) {
-                alienBullets.splice(i, 1);
-                createExplosion(player.x + player.w/2, player.y + player.h/2, "#f43f5e");
-                playSoundExplosion(true);
-                gameActive = false;
-                gameOver = true;
-                setTimeout(() => alert(`Ligne de défense rompue ! Fin de transmission. Score final : ${score}`), 50);
-            }
-            else if (ab.y > canvas.height) {
-                alienBullets.splice(i, 1);
-            }
-        }
-
-        // --- Gestion des BUNKERS (Boucliers) ---
-        ctx.fillStyle = "#22c55e"; // Vert fluo classique
-        for (let i = shields.length - 1; i >= 0; i--) {
-            let s = shields[i];
-            if (!s.active) continue;
-
-            // Collision Tir Joueur vs Bunker
-            for (let b = bullets.length - 1; b >= 0; b--) {
-                let bullet = bullets[b];
-                if (bullet.x < s.x + s.w && bullet.x + bullet.w > s.x && bullet.y < s.y + s.h && bullet.y + bullet.h > s.y) {
-                    s.active = false;
-                    bullets.splice(b, 1);
-                    break;
-                }
-            }
-            if (!s.active) continue;
-
-            // Collision Tir Alien vs Bunker
-            for (let ab = alienBullets.length - 1; ab >= 0; ab--) {
-                let bullet = alienBullets[ab];
-                if (bullet.x < s.x + s.w && bullet.x + bullet.w > s.x && bullet.y < s.y + s.h && bullet.y + bullet.h > s.y) {
-                    s.active = false;
-                    alienBullets.splice(ab, 1);
-                    break;
-                }
-            }
-            if (!s.active) continue;
-
-            // Collision Corps Alien vs Bunker (destruction massive)
-            for (let a = 0; a < aliens.length; a++) {
-                let alien = aliens[a];
-                if (alien.x < s.x + s.w && alien.x + alien.w > s.x && alien.y < s.y + s.h && alien.y + alien.h > s.y) {
-                    s.active = false;
-                    break;
-                }
-            }
-            
-            if (s.active) {
-                ctx.fillRect(s.x, s.y, s.w, s.h);
-            }
-        }
-        shields = shields.filter(s => s.active); // Nettoyage de la mémoire
-
-        // --- Mouvement et Comportement Aliens ---
-        let changeDir = false;
-        aliens.forEach(alien => {
-            alien.x += alien.speed * alien.direction;
-            if (alien.x > canvas.width - alien.w || alien.x < 0) changeDir = true;
-
-            ctx.fillStyle = "#a855f7";
-            ctx.fillRect(alien.x, alien.y, alien.w, alien.h);
-            ctx.fillStyle = "#000";
-            ctx.fillRect(alien.x + 5, alien.y + 5, 4, 4);
-            ctx.fillRect(alien.x + alien.w - 9, alien.y + 5, 4, 4);
-
-            if (Math.random() < 0.002) {
-                alienBullets.push({ x: alien.x + alien.w/2, y: alien.y + alien.h, w: 3, h: 8, speed: 4.5 });
-            }
-        });
-
-        if (changeDir) {
-            aliens.forEach(alien => {
-                alien.direction *= -1;
-                alien.y += 12;
-                if (alien.y > player.y - 10) {
-                    gameActive = false;
-                    gameOver = true;
-                    setTimeout(() => alert("Alerte critique : Les éclaireurs ont touché le sol."), 50);
-                }
-            });
-        }
-
-        // Collisions Tirs Joueur vs Aliens
-        for (let b = bullets.length - 1; b >= 0; b--) {
-            let bullet = bullets[b];
-            for (let a = aliens.length - 1; a >= 0; a--) {
-                let alien = aliens[a];
-                if (bullet.x < alien.x + alien.w && bullet.x + bullet.w > alien.x && bullet.y < alien.y + alien.h && bullet.y + bullet.h > alien.y) {
-                    createExplosion(alien.x + alien.w/2, alien.y + alien.h/2, "#a855f7");
-                    playSoundExplosion(false);
-                    aliens.splice(a, 1);
-                    bullets.splice(b, 1);
-                    score += 10;
-                    document.getElementById('score').innerText = "Score : " + score;
-                    break;
-                }
-            }
-        }
-
-        // --- Logique du BOSS ---
-        if (!boss.active && aliens.length === 0) spawnBoss();
-
-        if (boss.active) {
-            boss.x += boss.speed * boss.direction;
-            if (boss.x > canvas.width - boss.w || boss.x < 0) boss.direction *= -1;
-
-            if (Math.random() < 0.04) {
-                alienBullets.push({ x: boss.x + Math.random() * boss.w, y: boss.y + boss.h, w: 4, h: 10, speed: 5 });
-            }
-
-            ctx.fillStyle = "#ec4899";
-            ctx.fillRect(boss.x, boss.y, boss.w, boss.h);
-            ctx.fillStyle = "#f43f5e";
-            ctx.fillRect(boss.x + 15, boss.y + boss.h, boss.w - 30, 7);
-            
-            ctx.strokeStyle = "rgba(236, 72, 153, 0.5)";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(boss.x - 3, boss.y - 3, boss.w + 6, boss.h + 10);
-
-            for (let b = bullets.length - 1; b >= 0; b--) {
-                let bullet = bullets[b];
-                if (bullet.x < boss.x + boss.w && bullet.x + bullet.w > boss.x && bullet.y < boss.y + boss.h && bullet.y + bullet.h > boss.y) {
-                    bullets.splice(b, 1);
-                    boss.hp--;
-                    score += 5;
-                    document.getElementById('score').innerText = "Score : " + score;
-                    document.getElementById("bossHp").innerText = boss.hp;
-                    createExplosion(bullet.x, bullet.y, "#f43f5e");
-                    
-                    if (boss.hp <= 0) {
-                        boss.active = false;
-                        createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, "#ec4899");
-                        playSoundExplosion(true);
-                        score += 250;
-                        wave++;
-                        document.getElementById('score').innerText = "Score : " + score;
-                        document.getElementById('gameWave').innerText = "Vague : " + wave;
-                        setTimeout(() => alert(`Vaisseau Mère Neutralisé ! Transition vers le secteur spatial n°${wave}.`), 50);
-                        initShields(); // Restauration des boucliers pour la prochaine vague
-                        spawnAliens();
-                    }
-                }
-            }
-        }
-
-        // --- Particules d'explosions ---
-        for (let i = particles.length - 1; i >= 0; i--) {
-            let p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.alpha -= 0.02;
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = Math.max(0, p.alpha);
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-            if(p.alpha <= 0) particles.splice(i, 1);
-        }
-
-        requestAnimationFrame(updateGame);
-    }
-    requestAnimationFrame(updateGame);
-
-
-    // --- CYCLE LUNAIRE ---
-    function getMoonPhase() {
-        const lunarCycle = 29.53058867;
-        const knownNewMoon = new Date(2000, 0, 6, 18, 14);
-        const now = new Date();
-        const diff = now - knownNewMoon;
-        const days = diff / (1000 * 60 * 60 * 24);
-        const phase = days % lunarCycle;
-        const phaseRatio = phase / lunarCycle;
-
-        if (phaseRatio < 0.03 || phaseRatio > 0.97) return "Nouvelle Lune 🌑";
-        if (phaseRatio < 0.22) return "Premier Croissant 🌒";
-        if (phaseRatio < 0.28) return "Premier Quartier 🌓";
-        if (phaseRatio < 0.47) return "Gibbeuse croissante 🌔";
-        if (phaseRatio < 0.53) return "Pleine Lune 🌕";
-        if (phaseRatio < 0.72) return "Gibbeuse décroissante 🌖";
-        if (phaseRatio < 0.78) return "Dernier Quartier 🌗";
-        return "Dernier Croissant 🌘";
-    }
-
-    function updateMoon() {
-        const out = document.getElementById("moonPhase");
-        if(out) out.textContent = getMoonPhase();
-    }
-    updateMoon();
-    setInterval(updateMoon, 60000);
-</script>
-	<div id="loginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
-		<div class="glass-card p-8 rounded-2xl w-full max-w-md relative border-cyan-500/30 shadow-[0_0_30px_rgba(34,211,238,0.1)]">
-			<button onclick="closeLoginModal()" class="absolute top-4 right-5 text-slate-400 hover:text-red-400 font-bold font-orbitron text-xl transition">X</button>
-			
-			<h3 class="text-2xl font-orbitron text-cyan-400 mb-2 text-center">IDENTIFICATION</h3>
-			<p class="text-xs text-slate-400 text-center mb-6 font-mono uppercase tracking-widest">Connexion sécurisée au Hub J.E.U.</p>
-			
-			<div class="space-y-4">
-				<div>
-					<label class="block text-sm text-slate-300 font-orbitron mb-1 tracking-wide">ID CADET</label>
-					<input type="text" id="loginUser" class="w-full bg-slate-900/80 p-3 rounded-lg border border-slate-700 text-white focus:border-cyan-500 focus:outline-none font-mono" placeholder="Entrez votre identifiant">
-				</div>
-				<div>
-					<label class="block text-sm text-slate-300 font-orbitron mb-1 tracking-wide">CODE D'ACCÈS</label>
-					<input type="password" id="loginPass" class="w-full bg-slate-900/80 p-3 rounded-lg border border-slate-700 text-white focus:border-cyan-500 focus:outline-none font-mono" placeholder="••••••••">
-				</div>
-				
-				<div id="loginError" class="hidden bg-red-900/30 border border-red-500/50 text-red-400 text-sm font-bold text-center p-2 rounded-lg font-orbitron tracking-wide mt-2">
-					ACCÈS REFUSÉ. COORDONNÉES INVALIDES.
-				</div>
-				
-				<button onclick="attemptLogin()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-black font-black font-orbitron py-3 rounded-xl transition tracking-widest mt-6 shadow-lg shadow-cyan-500/20 active:scale-95">
-					DÉMARRER LA SESSION
-				</button>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		// --- GESTION DE LA CONNEXION MANUELLE ---
-		
-		// 1. Mise à jour de l'affichage du bouton dès la lecture du script
-		const btn = document.getElementById('loginBtn');
-		if (btn) {
-			if (localStorage.getItem('jeu_auth') === 'true') {
-				btn.innerText = "Espace Revues";
-			} else {
-				btn.innerText = "Connexion : Espace Revues";
-			}
-		}
-
-		// 2. Clic sur le bouton (Redirection ou Modale)
-		function openLoginModal() { 
-			if (localStorage.getItem('jeu_auth') === 'true') {
-				window.location.href = "espace-membres.html";
-			} else {
-				document.getElementById('loginModal').classList.remove('hidden'); 
-			}
-		}
-		
-		// 3. Fermeture de la modale
-		function closeLoginModal() {
-			document.getElementById('loginModal').classList.add('hidden');
-			document.getElementById('loginError').classList.add('hidden');
-			document.getElementById('loginUser').value = '';
-			document.getElementById('loginPass').value = '';
-		}
-
-		// 4. Tentative de connexion
-		function attemptLogin() {
-			const user = document.getElementById('loginUser').value.trim().toLowerCase();
-			const pass = document.getElementById('loginPass').value;
-			
-			// --- IDENTIFIANTS HARDCODÉS ICI ---
-			const validUser = "cadet";
-			const validPass = "roger2026";
-			// ---------------------------------
-
-			if (user === validUser && pass === validPass) {
-				localStorage.setItem('jeu_auth', 'true');
-				window.location.href = 'espace-membres.html';
-			} else {
-				document.getElementById('loginError').classList.remove('hidden');
-			}
-		}
-
-		// 5. Permettre la validation avec la touche "Entrée"
-		const passInput = document.getElementById('loginPass');
-		if (passInput) {
-			passInput.addEventListener('keypress', function (e) {
-				if (e.key === 'Enter') attemptLogin();
-			});
-		}
-	</script>
 </body>
 </html>
