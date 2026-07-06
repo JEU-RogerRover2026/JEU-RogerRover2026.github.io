@@ -285,61 +285,71 @@ if(p) p.remove();
 			</div>
 		</div>
 	</div>
-<script>
-		// --- GESTION DE LA CONNEXION MANUELLE ---
-		
-		// 1. Mise à jour de l'affichage du bouton dès la lecture du script
-		const btn = document.getElementById('loginBtn');
-		if (btn) {
-			if (localStorage.getItem('jeu_auth') === 'true') {
-				btn.innerText = "Espace Revues";
-			} else {
-				btn.innerText = "Connexion : Espace Revues";
-			}
-		}
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
 
-		// 2. Clic sur le bouton (Redirection ou Modale)
-		function openLoginModal() { 
-			if (localStorage.getItem('jeu_auth') === 'true') {
-				window.location.href = "espace-membres.html";
-			} else {
-				document.getElementById('loginModal').classList.remove('hidden'); 
-			}
-		}
-		
-		// 3. Fermeture de la modale
-		function closeLoginModal() {
-			document.getElementById('loginModal').classList.add('hidden');
-			document.getElementById('loginError').classList.add('hidden');
-			document.getElementById('loginUser').value = '';
-			document.getElementById('loginPass').value = '';
-		}
+		  // --- 1. Mise à jour bouton ---
+		  const btn = document.getElementById('loginBtn');
 
-		// 4. Tentative de connexion
-		function attemptLogin() {
-			const user = document.getElementById('loginUser').value.trim().toLowerCase();
-			const pass = document.getElementById('loginPass').value;
-			
-			// --- IDENTIFIANTS HARDCODÉS ICI ---
+		  if (btn) {
+			if (localStorage.getItem('jeu_auth') === 'true') {
+			  btn.innerText = "Espace Revues";
+			} else {
+			  btn.innerText = "Connexion : Espace Revues";
+			}
+		  }
+
+		  // --- 2. open modal / redirect ---
+		  window.openLoginModal = function () {
+			if (localStorage.getItem('jeu_auth') === 'true') {
+			  window.location.href = "espace-membres.html";
+			} else {
+			  document.getElementById('loginModal')?.classList.remove('hidden');
+			}
+		  };
+
+		  // --- 3. close modal ---
+		  window.closeLoginModal = function () {
+			document.getElementById('loginModal')?.classList.add('hidden');
+			document.getElementById('loginError')?.classList.add('hidden');
+
+			const u = document.getElementById('loginUser');
+			const p = document.getElementById('loginPass');
+
+			if (u) u.value = '';
+			if (p) p.value = '';
+		  };
+
+		  // --- 4. login ---
+		  window.attemptLogin = function () {
+
+			const userEl = document.getElementById('loginUser');
+			const passEl = document.getElementById('loginPass');
+
+			const user = userEl?.value.trim().toLowerCase();
+			const pass = passEl?.value;
+
 			const validUser = "cadet";
 			const validPass = "roger2026";
-			// ---------------------------------
 
 			if (user === validUser && pass === validPass) {
-				localStorage.setItem('jeu_auth', 'true');
-				window.location.href = 'espace-membres.html';
+			  localStorage.setItem('jeu_auth', 'true');
+			  window.location.href = 'espace-membres.html';
 			} else {
-				document.getElementById('loginError').classList.remove('hidden');
+			  document.getElementById('loginError')?.classList.remove('hidden');
 			}
-		}
+		  };
 
-		// 5. Permettre la validation avec la touche "Entrée"
-		const passInput = document.getElementById('loginPass');
-		if (passInput) {
+		  // --- 5. Enter key ---
+		  const passInput = document.getElementById('loginPass');
+
+		  if (passInput) {
 			passInput.addEventListener('keypress', function (e) {
-				if (e.key === 'Enter') attemptLogin();
+			  if (e.key === 'Enter') attemptLogin();
 			});
-		}
+		  }
+
+		});
 	</script>
 
 </body>
