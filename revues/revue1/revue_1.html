@@ -122,11 +122,11 @@
 		.animate-pop { animation: pop 0.3s cubic-bezier(0.17, 0.89, 0.32, 1.28); }
 
 		/* Classes utilitaires pour le JS */
-		.quiz-btn-correct {
-			@apply border-emerald-500 bg-emerald-500/20 text-emerald-400 !important;
-		}
+        .quiz-btn-correct {
+            @apply !border-emerald-500 !bg-emerald-500/20 !text-emerald-400;
+        }
 		.quiz-btn-wrong {
-			@apply border-red-500 bg-red-500/20 text-red-400 !important;
+			@apply !border-red-500 !bg-red-500/20 !text-red-400;
 		}
 		.animate-fade-in {
 			animation: fadeIn 0.5s ease-out;
@@ -2404,7 +2404,7 @@
 				<iframe 
 					id="ksp-frame"
 					class="w-full h-full"
-					src="./KSP_guide.html"
+					src="assets/KSP_guide.html"
 					frameborder="0">
 				</iframe>
 
@@ -3147,7 +3147,7 @@
 				return;
 			}
 
-			frame.src = "./KSP_guide.html";
+			frame.src = "assets/KSP_guide.html";
 
 			modal.classList.remove("hidden");
 			modal.classList.add("active");
