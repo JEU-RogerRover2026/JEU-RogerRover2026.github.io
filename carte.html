@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+
+    <title>Espace cartographie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/> 
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script> 
+	
+    
+    <script>
+		// SÉCURITÉ : Vérification de l'authentification locale
+		// S'exécute immédiatement pour éviter le clignotement de la page
+		if (localStorage.getItem('jeu_auth') !== 'true') {
+			// Éjection si le tag n'est pas présent
+			window.location.replace("index.html");
+		}
+
+		// Fonction déclenchée par ton bouton HTML "DÉCONNEXION"
+		function triggerLogout() {
+			// On supprime la clé d'authentification
+			localStorage.removeItem('jeu_auth');
+			// On renvoie à l'accueil
+			window.location.replace("index.html");
+		}
+	</script>
+
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background: #070a13; color: #e2e8f0; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); border: 1px solid #1e293b; }
+        .locked-card { background: rgba(15, 23, 42, 0.3); border: 1px dashed #334155; opacity: 0.6; filter: grayscale(80%); }
+    </style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body class="min-h-screen flex flex-col">
+
+<nav class="bg-slate-900/80 backdrop-blur border-b border-slate-800 p-4 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="font-orbitron font-black text-xl tracking-widest text-white">
+            J.E.U. <span class="text-cyan-400">HUB</span>
+        </div>
+		<div class="flex gap-4 items-center">
+
+		  <!-- Accueil -->
+		  <button onclick="window.location.href='index.html'"
+			class="flex items-center gap-2 
+				   bg-cyan-600/20 hover:bg-cyan-600 
+				   text-cyan-400 hover:text-white 
+				   border border-cyan-900/50 hover:border-cyan-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-house"></i> RETOUR À L'ACCUEIL
+		  </button>
+		  
+		  <!-- Espace membres -->
+		  <button onclick="window.location.href='espace-membres.html'"
+			class="flex items-center gap-2 
+				   bg-purple-600/20 hover:bg-purple-600 
+				   text-purple-400 hover:text-white 
+				   border border-purple-900/50 hover:border-purple-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-book"></i> ESPACE REVUES
+		  </button>
+
+		  <!-- Déconnexion -->
+		  <button onclick="triggerLogout()"
+			class="flex items-center gap-2 
+				   bg-red-600/20 hover:bg-red-600 
+				   text-red-400 hover:text-white 
+				   border border-red-900/50 hover:border-red-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+		  </button>
+
+		</div>
+    </div>
+</nav>
+
+<header class="py-12 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-orbitron font-black text-white mb-4">
+            ESPACE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">CARTOGRAPHIE</span>
+        </h1>
+        <p class="text-lg text-slate-400">
+            Bienvenue dans votre centre de surveillance, Cadet.
+        </p>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto py-8 px-6 flex-grow w-full">
+    
+    <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col gap-6 w-full">
+    
+								<div class="space-y-2">
+									<h4 class="font-bold text-lg text-white"><i class="fa-solid fa-map-location-dot text-spaceNeonBlue mr-2"></i>Carte des Événements & Expositions Spatiales</h4>
+									<p class="text-xs text-slate-400 leading-relaxed">Découvrez les expositions, planétariums et expériences immersives en cours ou à venir. <br>Utilisez la molette de votre souris ou les boutons +/- pour zoomer. <br> Cliquez sur un point pour plus d'infos !</p>
+								</div>
+								
+								<!-- Filtres Multi-sélection colorés -->
+								<div class="flex flex-wrap gap-2 items-center">
+									<span class="text-xs text-slate-400 font-semibold mr-2">Filtrer par type :</span>
+									<button onclick="toggleFilter('Permanent')" id="filter-Permanent" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40 shadow-[0_0_8px_rgba(59,130,246,0.3)] transition-all multi-filter-btn" data-type="Permanent">Musée / Lieu Permanent</button>
+									<button onclick="toggleFilter('Exposition')" id="filter-Exposition" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/40 shadow-[0_0_8px_rgba(168,85,247,0.3)] transition-all multi-filter-btn" data-type="Exposition">Exposition</button>
+									<button onclick="toggleFilter('Temporaire')" id="filter-Temporaire" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 shadow-[0_0_8px_rgba(250,204,21,0.3)] transition-all multi-filter-btn" data-type="Temporaire">Événement Temporaire</button>
+									<button onclick="toggleFilter('Escape Game')" id="filter-Escape Game" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-pink-500/20 text-pink-400 border border-pink-500/40 shadow-[0_0_8px_rgba(236,72,153,0.3)] transition-all multi-filter-btn" data-type="Escape Game">Escape Game</button>
+								</div>
+
+								<!-- Conteneur de la carte Leaflet -->
+								<div id="space-map" class="w-full h-[600px] rounded-xl border border-slate-800 z-10 relative">
+									<div id="map-error" class="absolute inset-0 flex items-center justify-center text-red-500 bg-slate-900/80 rounded-xl hidden z-20">
+										Une erreur est survenue lors du chargement de la carte. Vérifiez que Leaflet est bien inclus dans le &lt;head&gt;.
+									</div>
+								</div>
+
+								<!-- Section Recherche et Tableau -->
+								<div class="w-full space-y-4">
+									<div class="relative w-full md:w-1/2">
+										<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+											<i class="fa-solid fa-magnifying-glass"></i>
+										</span>
+										<input type="text" id="eventSearch" onkeyup="filterEvents()" placeholder="Rechercher une ville, un événement, un type..." class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block pl-10 p-2.5 placeholder-slate-500 transition-colors">
+									</div>
+
+									<div class="overflow-x-auto rounded-lg border border-slate-800 h-96 overflow-y-auto">
+										<table class="w-full text-sm text-left text-slate-400" id="eventsTable">
+											<thead class="text-xs text-slate-300 uppercase bg-slate-900 border-b border-slate-800 sticky top-0 z-10 shadow-md">
+												<tr>
+													<th scope="col" class="px-4 py-3">Événement</th>
+													<th scope="col" class="px-4 py-3">Lieu</th>
+													<th scope="col" class="px-4 py-3 min-w-[140px]">Type & Dates</th>
+													<th scope="col" class="px-4 py-3">Description</th>
+													<th scope="col" class="px-4 py-3 text-center">Lien</th>
+												</tr>
+											</thead>
+											<tbody id="eventsTbody">
+												<!-- Généré en JS -->
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+ 
+</main>
+
+<style>
+						/* Popups Leaflet Sombres */
+						.leaflet-popup-content-wrapper { background-color: #0f172a !important; color: #f8fafc !important; border: 1px solid #1e293b !important; border-radius: 0.75rem !important; }
+						.leaflet-popup-tip { background-color: #0f172a !important; border: 1px solid #1e293b !important; }
+						.leaflet-popup-content a { color: #38bdf8 !important; text-decoration: underline; }
+						.leaflet-control-zoom a { background-color: #1e293b !important; color: #f8fafc !important; border-color: #0f172a !important; }
+						.leaflet-control-zoom a:hover { background-color: #334155 !important; }
+						
+						/* Retire le fond blanc par défaut des icônes custom Leaflet */
+						.custom-map-marker { background: transparent; border: none; }
+					</style>
+
+					<script>
+						const spaceEvents = [
+							// --- LES 3 NOUVEAUX AJOUTS ---
+							{
+								titre: "Expo Propulsion Aérospatiale",
+								lieu: "INSA Rouen, Normandie",
+								lat: 49.3831, lng: 1.0772,
+								lien: "https://www.insa-rouen.fr/vie-etudiante/vie-culturelle/expositions-sur-la-propulsion-aerospatiale",
+								desc: "Exposition dédiée à l'ingénierie et aux technologies de pointe de la propulsion aérospatiale.",
+								type: "Exposition",
+								dates: "Voir site"
+							},
+							{
+								titre: "Destination Mars (50 ans Viking)",
+								lieu: "CNES",
+								lat: 48.8614, lng: 2.3443, // Siège CNES Paris
+								lien: "https://cnes.fr/evenements/exposition-destination-mars-50e-anniversaire-missions-viking",
+								desc: "Célébration des 50 ans des missions Viking et rétrospective sur l'exploration de la planète rouge.",
+								type: "Exposition",
+								dates: "2026"
+							},
+							{
+								titre: "Expositions CVA : Explorer l'espace",
+								lieu: "Vernon, Normandie",
+								lat: 49.0913, lng: 1.4865, // Berceau des moteurs Ariane
+								lien: "https://www.vernon27.fr/actualites/les-expositions-cva-une-invitation-a-explorer-lespace-et-ses-pionniers/",
+								desc: "Exposition de la Communauté des Villes Ariane pour découvrir les pionniers de l'espace et les lanceurs.",
+								type: "Exposition",
+								dates: "Voir site"
+							},
+							
+							// --- LES ANCIENS AJOUTS ---
+							{
+								titre: "Musée Safran",
+								lieu: "Réau, Île-de-France",
+								lat: 48.6071, lng: 2.6631,
+								lien: "https://www.safran-group.com/fr/groupe/histoire-patrimoine/musee-safran",
+								desc: "Superbe collection de moteurs d'avions et de fusées retraçant l'histoire de l'aérospatial.",
+								type: "Permanent"
+							},
+							{
+								titre: "Siège de l'ESA - L'Astrolabe",
+								lieu: "Paris (15e)",
+								lat: 48.8474, lng: 2.3023,
+								lien: "https://www.esa.int/Space_in_Member_States/France/Le_siege_de_l_ESA_a_Paris_seduit_les_visiteurs_avec_une_exposition_ultramoderne",
+								desc: "Exposition ultramoderne ouverte au public au cœur du siège de l'Agence Spatiale Européenne.",
+								type: "Exposition",
+								dates: "Permanent / Ouvert toute l'année"
+							},
+							{
+								titre: "FDS : Les combinaisons spatiales",
+								lieu: "Caen, Normandie",
+								lat: 49.1828, lng: -0.3706,
+								lien: "https://fetedelascience-normandie.fr/evenements/les-combinaisons-spatiales/",
+								desc: "Plongez dans l'évolution et la technologie des combinaisons de survie des astronautes.",
+								type: "Temporaire",
+								dates: "Octobre 2026 (Fête de la Science)"
+							},
+							{
+								titre: "Village des Sciences (Caen)",
+								lieu: "Campus 2, Caen",
+								lat: 49.2120, lng: -0.3640,
+								lien: "https://fetedelascience-normandie.fr/villages-des-sciences/",
+								desc: "Animations, démonstrations et ateliers interactifs sur les sciences et l'univers.",
+								type: "Temporaire",
+								dates: "Octobre 2026"
+							},
+							{
+								titre: "Village des Sciences (Rouen)",
+								lieu: "Le Madrillet, Rouen",
+								lat: 49.3831, lng: 1.0772,
+								lien: "https://fetedelascience-normandie.fr/villages-des-sciences/",
+								desc: "Rencontres avec des chercheurs et ateliers d'astronomie.",
+								type: "Temporaire",
+								dates: "Octobre 2026"
+							},
+							{
+								titre: "Village des Sciences (Le Havre)",
+								lieu: "Hôtel de Ville, Le Havre",
+								lat: 49.4938, lng: 0.1077,
+								lien: "https://fetedelascience-normandie.fr/villages-des-sciences/",
+								desc: "Ateliers découverte et expositions scientifiques grand public.",
+								type: "Temporaire",
+								dates: "Octobre 2026"
+							},
+							{
+								titre: "Village des Sciences (Cherbourg)",
+								lieu: "La Cité de la Mer, Cherbourg",
+								lat: 49.6450, lng: -1.6167,
+								lien: "https://fetedelascience-normandie.fr/villages-des-sciences/",
+								desc: "Immersion dans les sciences de l'océan et de l'espace.",
+								type: "Temporaire",
+								dates: "Octobre 2026"
+							},
+							{
+								titre: "Parcours Scientifique d'Évreux",
+								lieu: "IUT Évreux",
+								lat: 49.0270, lng: 1.1508,
+								lien: "https://fetedelascience-normandie.fr/parcours-scientifiques/",
+								desc: "Itinéraire de découverte scientifique axé sur les défis de demain.",
+								type: "Temporaire",
+								dates: "Octobre 2026"
+							},
+							{
+								titre: "Parcours Scientifique d'Elbeuf",
+								lieu: "Fabrique des Savoirs, Elbeuf",
+								lat: 49.2905, lng: 1.0118,
+								lien: "https://fetedelascience-normandie.fr/parcours-scientifiques/",
+								desc: "Balade éducative et ateliers scientifiques.",
+								type: "Temporaire",
+								dates: "Octobre 2026"
+							},
+							{
+								titre: "Programme spatial immersif",
+								lieu: "Atelier des Lumières, Paris",
+								lat: 48.8615, lng: 2.3802,
+								lien: "https://www.atelier-lumieres.com/fr/programmation",
+								desc: "Exposition immersive projetée sur les murs de l'Atelier.",
+								type: "Temporaire",
+								dates: "Jusqu'en janvier 2027"
+							},
+							{
+								titre: "Le Planétarium",
+								lieu: "Cité des Sciences, Paris",
+								lat: 48.8956, lng: 2.3880,
+								lien: "https://www.cite-sciences.fr/fr/au-programme/activites-spectacles/le-planetarium",
+								desc: "Spectacles immersifs sous dôme pour explorer le système solaire.",
+								type: "Permanent"
+							},
+							{
+								titre: "Exposition Temporaire",
+								lieu: "Musée Air et Espace, Le Bourget",
+								lat: 48.9482, lng: 2.4332,
+								lien: "https://www.museeairespace.fr/agenda/categorie/exposition-temporaire/",
+								desc: "Découvrez les expositions éphémères du plus grand musée aéronautique.",
+								type: "Temporaire",
+								dates: "Voir site (Change régulièrement)"
+							},
+							{
+								titre: "Rencontres du ciel et de l'espace",
+								lieu: "Paris",
+								lat: 48.8940, lng: 2.3870,
+								lien: "https://www.visitparisregion.com/fr/les-rencontres-du-ciel-et-de-l-espace",
+								desc: "Le rendez-vous incontournable des passionnés d'astronomie.",
+								type: "Temporaire",
+								dates: "Novembre 2026"
+							},
+							{
+								titre: "Expo Télescope Einstein",
+								lieu: "Technopolis, Belgique",
+								lat: 50.9922, lng: 4.4844,
+								lien: "https://www.technopolis.be/fr/expositions/expo-temporaire-telescope-einstein/",
+								desc: "Découvrez les ondes gravitationnelles.",
+								type: "Exposition",
+								dates: "Temporaire (Voir dates)"
+							},
+							{
+								titre: "Planétarium",
+								lieu: "Vaulx-en-Velin, Lyon",
+								lat: 45.7788, lng: 4.9221,
+								lien: "https://vaulx-en-velin.net/sortir/culture/planetarium/",
+								desc: "L'un des plus grands planétariums de la région.",
+								type: "Permanent"
+							},
+							{
+								titre: "Epsilon - Au cœur de l'ISS",
+								lieu: "Cité de l'Espace, Toulouse",
+								lat: 43.5868, lng: 1.4932,
+								lien: "https://www.franceinfo.fr/partenariats/evenement-plongez-au-c-ur-de-l-iss-avec-l-exposition-epsilon-de-la-cite-de-l-espace-de-toulouse_7921181.html",
+								desc: "Plongez dans le quotidien des astronautes.",
+								type: "Exposition",
+								dates: "En cours"
+							},
+							{
+								titre: "Édition Spatiale (ESA)",
+								lieu: "Strasbourg",
+								lat: 48.5734, lng: 7.7521,
+								lien: "https://www.esa.int/Space_in_Member_States/France/Strasbourg_edition_spatiale",
+								desc: "Événements liés aux programmes spatiaux européens.",
+								type: "Exposition"
+							},
+							{
+								titre: "Space Explorers : L'ISS Experience",
+								lieu: "Eclipso, Lyon",
+								lat: 45.7413, lng: 4.8197,
+								lien: "https://eclipso-entertainment.com/lyon/space-explorers/",
+								desc: "Expérience VR dans la Station Spatiale Internationale.",
+								type: "Temporaire",
+								dates: "Prolongation exceptionnelle"
+							},
+							{
+								titre: "Space Explorers : L'ISS Experience",
+								lieu: "Bordeaux Secret",
+								lat: 44.8378, lng: -0.5792,
+								lien: "https://bordeauxsecret.com/space-explorers-the-iss-experience-bordeaux/",
+								desc: "L'immersion VR de la vie dans l'espace.",
+								type: "Temporaire",
+								dates: "Bientôt de retour"
+							},
+							{
+								titre: "Voyage au cœur des Océans",
+								lieu: "Sous-sols La Défense, Paris",
+								lat: 48.8923, lng: 2.2372,
+								lien: "https://www.connaissancedesarts.com/arts-expositions/exposition-immersive/une-exposition-a-paris-transforme-les-sous-sols-de-la-defense-en-voyage-immersif-insolite-au-coeur-des-oceans-11211384/",
+								desc: "Expérience visuelle et sonore immersive.",
+								type: "Temporaire",
+								dates: "Voir site"
+							},
+							{
+								titre: "Cosmocité",
+								lieu: "Pont-de-Claix, Grenoble",
+								lat: 45.1415, lng: 5.6989,
+								lien: "https://www.cosmocite.fr/",
+								desc: "Centre de sciences avec planétarium et salle 3D.",
+								type: "Permanent"
+							},
+							{
+								titre: "Observatoire de Paris",
+								lieu: "Meudon",
+								lat: 48.8055, lng: 2.2307,
+								lien: "https://www.observatoiredeparis.psl.eu/",
+								desc: "Haut lieu historique de l'astronomie française.",
+								type: "Permanent"
+							},
+							{
+								titre: "Observatoire Côte d'Azur",
+								lieu: "Nice",
+								lat: 43.7275, lng: 7.2991,
+								lien: "https://www.oca.eu/",
+								desc: "Visites du grand équatorial.",
+								type: "Permanent"
+							},
+							{
+								titre: "Le PLUS",
+								lieu: "Cappelle-la-Grande",
+								lat: 50.9997, lng: 2.3683,
+								lien: "https://www.le-plus.fr/",
+								desc: "Planétarium géant.",
+								type: "Permanent"
+							},
+							{
+								titre: "Ludiver",
+								lieu: "La Hague, Normandie",
+								lat: 49.6300, lng: -1.7770,
+								lien: "https://ludiver.lecotentin.fr/",
+								desc: "Observatoire et planétarium.",
+								type: "Permanent"
+							},
+							{
+								titre: "Espace des Sciences",
+								lieu: "Rennes, Bretagne",
+								lat: 48.1054, lng: -1.6744,
+								lien: "https://www.espace-sciences.org/",
+								desc: "Planétarium avec séances commentées en direct.",
+								type: "Permanent"
+							},
+							{
+								titre: "La Cité des Télécoms",
+								lieu: "Pleumeur-Bodou",
+								lat: 48.7845, lng: -3.5243,
+								lien: "https://www.cite-telecoms.com/",
+								desc: "Le célèbre Radôme géant.",
+								type: "Permanent"
+							},
+							{
+								titre: "Musée des Arts et Métiers",
+								lieu: "Paris",
+								lat: 48.8667, lng: 2.3553,
+								lien: "https://www.arts-et-metiers.net/",
+								desc: "Espace dédié à la conquête spatiale.",
+								type: "Permanent"
+							},
+							{
+								titre: "Le Parc aux Étoiles",
+								lieu: "Triel-sur-Seine",
+								lat: 48.9774, lng: 1.9965,
+								lien: "https://parcauxetoiles.gpseo.fr/",
+								desc: "Lieu d'observation astronomique.",
+								type: "Permanent"
+							},
+							{
+								titre: "Explorations, une question d'État",
+								lieu: "Musée de l'Armée, Paris",
+								lat: 48.8561, lng: 2.3122,
+								lien: "https://exhibitions.paris/fr/exposition/explorations-une-question-detat-musee-de-larmee-et-tombeau-de-napoleon/",
+								desc: "Les grandes explorations historiques.",
+								type: "Temporaire",
+								dates: "Fin prochainement"
+							},
+							{
+							titre: "Atrium Normandie",
+							lieu: "Rouen, Normandie",
+							lat: 49.4431, lng: 1.0993,
+							lien: "https://www.atriumnormandie.fr",
+							desc: "Centre de découverte de la science et de l'innovation en Normandie.",
+							type: "Permanent"
+							},
+							{
+							titre: "Planétarium de Bretagne",
+							lieu: "Pleumeur-Bodou, Bretagne",
+							lat: 48.7836, lng: -3.5238,
+							lien: "https://www.planetarium-bretagne.bzh",
+							desc: "Séances immersives sous grand dôme à 360° au cœur des Côtes-d'Armor.",
+							type: "Permanent"
+							},
+							{
+							titre: "Espace des Sciences Morlaix",
+							lieu: "Morlaix, Bretagne",
+							lat: 48.5772, lng: -3.8268,
+							lien: "https://www.espace-sciences-morlaix.org",
+							desc: "Centre culturel scientifique dédié aux sciences, à l'industrie et au patrimoine local.",
+							type: "Permanent"
+							},
+							{
+							titre: "Bus Escape Game - Mission Spatiale",
+							lieu: "Normandie / Déplacement",
+							lat: 49.4431, lng: 1.0993,
+							lien: "https://www.bus-escape-game.fr",
+							desc: "Escape game mobile sur le thème de l'espace à bord d'un bus aménagé.",
+							type: "Escape Game",
+							dates: "Sur réservation"
+							},
+							{
+							titre: "LockedUp - Escape Game",
+							lieu: "Rouen, Normandie",
+							lat: 49.4404, lng: 1.0939,
+							lien: "https://www.lockedup-escapegame.com",
+							desc: "Jeux d'évasion grandeur nature aux scénarios immersifs.",
+							type: "Escape Game",
+							dates: "Ouvert toute l'année"
+							},
+							{
+							titre: "Paradox VR - Escape Game VR 4D",
+							lieu: "Le Havre, Normandie",
+							lat: 49.4944, lng: 0.1079,
+							lien: "https://www.paradox-vr.fr/experiences-jeux-havre/escape-game-vr-4d/",
+							desc: "Expérience d'escape game en réalité virtuelle et 4D.",
+							type: "Escape Game",
+							dates: "Sur réservation"
+							},
+							{
+							titre: "La Mission Spatiale",
+							lieu: "The Game, Paris",
+							lat: 48.8512, lng: 2.3488,
+							lien: "https://www.thegame-france.com/fr/les-missions/la-mission-spatiale.htm",
+							desc: "Prenez le contrôle de la navette spatiale et gérez une avarie en temps limité.",
+							type: "Escape Game",
+							dates: "Ouvert toute l'année"
+							},
+							{
+							titre: "Adventure Spatiale",
+							lieu: "Adventure Center, Clermont-Ferrand",
+							lat: 45.7772, lng: 3.0870,
+							lien: "https://www.escapegame.fr/clermont-ferrand/adventurecenter/adventure-spatiale/",
+							desc: "Mission d'immersion totale au cœur d'une station spatiale en détresse.",
+							type: "Escape Game",
+							dates: "Ouvert toute l'année"
+							},
+							{
+							titre: "Cap Sciences",
+							lieu: "Bordeaux, Nouvelle-Aquitaine",
+							lat: 44.8587, lng: -0.5567,
+							lien: "https://www.cap-sciences.net",
+							desc: "Centre de culture scientifique, technique et industrielle proposant des expositions et ateliers interactifs.",
+							type: "Permanent"
+							},
+							{
+							titre: "Virtual Room - Bordeaux",
+							lieu: "Bordeaux, Nouvelle-Aquitaine",
+							lat: 44.8378, lng: -0.5792,
+							lien: "https://bordeaux.virtual-room.com",
+							desc: "Centre de réalité virtuelle proposant des aventures immersives et collaboratives.",
+							type: "Escape Game",
+							dates: "Sur réservation"
+							},
+							{
+							titre: "Jardin des Sciences de l'Université de Strasbourg",
+							lieu: "Strasbourg, Grand Est",
+							lat: 48.5839, lng: 7.7616,
+							lien: "https://jardin-sciences.unistra.fr",
+							desc: "Service culturel universitaire proposant un planétarium, des musées et des expositions scientifiques.",
+							type: "Permanent"
+							},
+							{
+							titre: "Planète Sciences Hauts-de-France",
+							lieu: "Lille, Hauts-de-France",
+							lat: 50.6292, lng: 3.0573,
+							lien: "https://www.planete-sciences.org/hautsdefrance/",
+							desc: "Association d'éducation populaire favorisant la pratique des sciences et techniques auprès des jeunes.",
+							type: "Permanent"
+							},
+							{
+							titre: "Planétarium de Nantes Métropole",
+							lieu: "Nantes, Pays de la Loire",
+							lat: 47.2184, lng: -1.5536,
+							lien: "https://planetarium.nantesmetropole.fr",
+							desc: "L'un des plus grands planétariums de France pour explorer l'univers sous un dôme immersif.",
+							type: "Permanent"
+							}
+						];
+						
+
+						// Fonction pour générer le bon badge et le bon marqueur selon le type
+						function getBadgeHtml(type, dates) {
+							let colorClass = "bg-blue-500/20 text-blue-400 border-blue-500/30"; // Permanent
+							if (type === "Temporaire") colorClass = "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+							if (type === "Exposition") colorClass = "bg-purple-500/20 text-purple-400 border-purple-500/30";
+							if (type === "Escape Game") colorClass = "bg-pink-500/20 text-pink-400 border-pink-500/30"; // <--- AJOUTÉ ICI
+							
+							let html = `<span class="px-2 py-1 rounded text-[10px] uppercase font-bold border ${colorClass}">${type}</span>`;
+							if (dates) html += `<span class="text-[10px] text-slate-500 italic mt-1 block">${dates}</span>`;
+							else if (type === "Permanent") html += `<span class="text-[10px] text-slate-500 italic mt-1 block">Toujours ouvert</span>`;
+							
+							return html;
+						}
+
+						function getMarkerIcon(type) {
+							let bgClass = "bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"; // Permanent
+							if (type === "Temporaire") bgClass = "bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.8)]";
+							if (type === "Exposition") bgClass = "bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.8)]";
+							if (type === "Escape Game") bgClass = "bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.8)]"; // <--- AJOUTÉ ICI
+
+							return L.divIcon({
+								className: 'custom-map-marker',
+								html: `<div class='w-4 h-4 rounded-full border-2 border-slate-900 ${bgClass}'></div>`,
+								iconSize: [16, 16],
+								iconAnchor: [8, 8]
+							});
+						}
+
+						// Variable globale pour stocker les éléments et leurs marqueurs
+						let mapMarkers = [];
+
+						document.addEventListener("DOMContentLoaded", () => {
+							if (typeof L === 'undefined') {
+								document.getElementById('map-error').classList.remove('hidden');
+								return;
+							}
+
+							const map = L.map('space-map', {
+								center: [48.0, 2.0],
+								zoom: 6,
+								zoomControl: true,       
+								scrollWheelZoom: true,
+								maxZoom: 19
+							});
+							
+							L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+								attribution: 'Tiles &copy; Esri',
+								maxZoom: 19
+							}).addTo(map);
+
+							const tbody = document.getElementById('eventsTbody');
+
+							spaceEvents.forEach((event) => {
+								const marker = L.marker([event.lat, event.lng], { icon: getMarkerIcon(event.type) }).addTo(map);
+								
+								marker.bindPopup(`
+									<div class="p-1 space-y-1">
+										<h5 class="font-bold text-sm text-pink-400 m-0">${event.titre}</h5>
+										<p class="text-xs text-slate-300 font-semibold m-0">${event.lieu}</p>
+										<div class="mt-1">${getBadgeHtml(event.type, event.dates)}</div>
+										<a href="${event.lien}" target="_blank" class="text-[10px] inline-block mt-2 font-bold">Voir le site ➔</a>
+									</div>
+								`);
+
+								// Ligne du tableau
+								const tr = document.createElement('tr');
+								tr.className = "bg-slate-900 border-b border-slate-800 hover:bg-slate-800 transition-colors event-row";
+								tr.setAttribute('data-type', event.type); // Stocke le type pour le filtre
+								tr.innerHTML = `
+									<th scope="row" class="px-4 py-4 font-bold text-white event-title">${event.titre}</th>
+									<td class="px-4 py-4 event-location">${event.lieu}</td>
+									<td class="px-4 py-4 event-type">${getBadgeHtml(event.type, event.dates)}</td>
+									<td class="px-4 py-4 text-xs leading-relaxed">${event.desc}</td>
+									<td class="px-4 py-4 text-center">
+										<a href="${event.lien}" target="_blank" class="bg-pink-500/20 text-pink-400 hover:bg-pink-500 hover:text-white p-2 rounded-lg transition-colors inline-block" title="Ouvrir le lien">
+											<i class="fa-solid fa-arrow-up-right-from-square"></i>
+										</a>
+									</td>
+								`;
+								tbody.appendChild(tr);
+
+								// On associe le marqueur à son type et à sa ligne de tableau
+								mapMarkers.push({
+									type: event.type,
+									marker: marker,
+									element: tr
+								});
+							});
+						});
+						
+						// Par défaut, tous les filtres sont actifs au chargement de la page
+						let activeFilters = ["Permanent", "Exposition", "Temporaire", "Escape Game"];
+
+						function toggleFilter(type) {
+							const btn = document.getElementById(`filter-${type}`);
+							
+							if (activeFilters.includes(type)) {
+								// Désactivation : le bouton devient gris/sombre
+								activeFilters = activeFilters.filter(t => t !== type);
+								btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-slate-500 border border-slate-800 transition-all multi-filter-btn opacity-50";
+							} else {
+								// Activation : le bouton reprend sa couleur spécifique
+								activeFilters.push(type);
+								if (type === 'Permanent') {
+									btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40 shadow-[0_0_8px_rgba(59,130,246,0.3)] transition-all multi-filter-btn";
+								} else if (type === 'Exposition') {
+									btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/40 shadow-[0_0_8px_rgba(168,85,247,0.3)] transition-all multi-filter-btn";
+								} else if (type === 'Temporaire') {
+									btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 shadow-[0_0_8px_rgba(250,204,21,0.3)] transition-all multi-filter-btn";
+								} else if (type === 'Escape Game') {
+									btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-pink-500/20 text-pink-400 border border-pink-500/40 shadow-[0_0_8px_rgba(236,72,153,0.3)] transition-all multi-filter-btn";
+								}
+							}
+
+							// Mise à jour de la carte et du tableau
+							mapMarkers.forEach(item => {
+								const match = activeFilters.includes(item.type);
+								
+								if (match) {
+									item.marker.setOpacity(1);
+									item.element.style.display = "";
+								} else {
+									item.marker.setOpacity(0);
+									item.element.style.display = "none";
+								}
+							});
+						}
+
+						// Filtre de recherche incluant le type et les dates
+						function filterEvents() {
+							const input = document.getElementById("eventSearch").value.toLowerCase();
+							const rows = document.getElementsByClassName("event-row");
+
+							for (let i = 0; i < rows.length; i++) {
+								let textTitle = rows[i].getElementsByClassName("event-title")[0].innerText.toLowerCase();
+								let textLoc = rows[i].getElementsByClassName("event-location")[0].innerText.toLowerCase();
+								let textType = rows[i].getElementsByClassName("event-type")[0].innerText.toLowerCase();
+								
+								if (textTitle.includes(input) || textLoc.includes(input) || textType.includes(input)) {
+									rows[i].style.display = "";
+								} else {
+									rows[i].style.display = "none";
+								}
+							}
+						}
+						</script>
+
+<footer class="mt-16 border-t border-slate-800 pt-12 pb-8 px-4 text-center">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mb-8">
+        <a href="https://www.esa.int" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">ESA</a>
+        <a href="https://cnes.fr" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">CNES</a>
+        <a href="https://www.nasa.gov" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">NASA</a>
+        <a href="https://global.jaxa.jp" target="_blank" class="text-slate-400 hover:text-cyan-400 transition font-orbitron font-bold tracking-wider">JAXA</a>
+    </div>
+    
+    <div class="max-w-2xl mx-auto bg-slate-900/50 p-6 rounded-2xl border border-slate-800 text-slate-500 text-xs leading-relaxed text-justify">
+        <p class="mb-4"><strong>Note sur la fiction ludique :</strong> Les éléments, personnages et situations présentés dans cette revue sont issus d'une fiction ludique destinée à illustrer les concepts scientifiques. Bien que cette simulation s'appuie sur des données réelles de l'aérospatiale, elle ne constitue en aucun cas un document officiel ou une procédure de pilotage réelle. L'association J.E.U. décline toute responsabilité en cas de confusion avec des informations techniques réelles. L'usage de cette fiction est strictement réservé à des fins pédagogiques et récréatives.</p>
+        <p class="text-center">© 2026 Association J.E.U. - Tous droits réservés.</p>
+    </div>
+</footer>
+
+</body>
+</html>
