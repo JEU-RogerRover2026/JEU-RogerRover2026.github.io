@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RogerRover 2026</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <title>Espace Revues - J.E.U.</title>
     <script src="https://cdn.tailwindcss.com"></script>
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script>
@@ -43,7 +43,7 @@
 		<div class="flex gap-4 items-center">
 
 		  <!-- Accueil -->
-		  <button type="button" onclick="window.location.href='index.html'"
+		  <button onclick="window.location.href='index.html'"
 			class="flex items-center gap-2 
 				   bg-cyan-600/20 hover:bg-cyan-600 
 				   text-cyan-400 hover:text-white 
@@ -54,9 +54,22 @@
 
 			<i class="fas fa-house"></i> RETOUR À L'ACCUEIL
 		  </button>
+		  
+		  <!-- Carte -->
+		  <button onclick="window.location.href='carte.html'"
+			class="flex items-center gap-2 
+				   bg-cyan-600/20 hover:bg-cyan-600 
+				   text-cyan-400 hover:text-white 
+				   border border-cyan-900/50 hover:border-cyan-500 
+				   px-4 py-2 rounded-lg 
+				   text-xs font-bold font-orbitron 
+				   transition-all duration-300">
+
+			<i class="fas fa-map"></i> CARTE
+		  </button>
 
 		  <!-- Déconnexion -->
-		  <button type="button" onclick="triggerLogout()"
+		  <button onclick="triggerLogout()"
 			class="flex items-center gap-2 
 				   bg-red-600/20 hover:bg-red-600 
 				   text-red-400 hover:text-white 
@@ -88,12 +101,12 @@
     
     <div class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-end">
         <h2 class="text-2xl font-orbitron text-cyan-400">CYCLE DES 12 REVUES</h2>
-        <div class="text-sm text-slate-500 font-mono">Progression : <span class="text-white">1/12</span></div>
+        <div class="text-sm text-slate-500 font-mono">Progression : <span class="text-white">2/12</span></div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-				<div class="glass-card rounded-xl p-6 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.15)] flex flex-col h-full">
+		<div class="glass-card rounded-xl p-6 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.15)] flex flex-col h-full">
 			<div class="flex justify-between items-start mb-4">
 				<span class="bg-cyan-500 text-black font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 01</span>
 				<span class="text-green-400 text-sm font-bold">🟢 ACCESSIBLE</span>
@@ -107,15 +120,19 @@
 			</a>
 		</div>
 
-		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
+		
+		<div class="glass-card rounded-xl p-6 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.15)] flex flex-col h-full">
 			<div class="flex justify-between items-start mb-4">
-				<span class="bg-slate-700 text-slate-300 font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 02</span>
-				<span class="text-red-400 text-sm font-bold">🔒 VERROUILLÉE</span>
+				<span class="bg-cyan-500 text-black font-black font-orbitron px-3 py-1 rounded text-sm">REVUE 02</span>
+				<span class="text-green-400 text-sm font-bold">🟢 ACCESSIBLE</span>
 			</div>
-			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">L'Anatomie d'un Satellite</h3>
-			<p class="text-slate-500 text-sm mb-6 flex-grow">
-				Comment un satellite tient-il en l'air à 400 km d'altitude ? Découvrez la production d'énergie solaire, la notion d'échec constructif, l'hygiène spatiale et les secrets des optiques de télescopes.
+			<h3 class="text-xl font-bold text-slate-300 mb-3 leading-tight">Destination Orbite : L'Espace sous toutes ses formes</h3>
+			<p class="text-slate-400 text-sm mb-6 flex-grow">
+				Comment un satellite tient-il en l'air à 400 km d'altitude ? Découvrez la mécanique orbitale, la notion d'échec constructif, l'hygiène spatiale, les portraits de Margaret Hamilton et Claire Tinel, ainsi qu'un atelier d'observation à l'œil nu.
 			</p>
+			<a href="revues/revue2/revue_2.html" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-orbitron font-bold py-3 rounded-lg transition">
+				CONSULTER
+			</a>
 		</div>
 
 		<div class="locked-card rounded-xl p-6 flex flex-col h-full">
